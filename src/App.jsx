@@ -1,9 +1,9 @@
-import UserTable from "./components/UserTable";
+import Users from "./components/Users";
 
 function App() {
   return (
     <>
-      <UserTable />
+      <Users />
     </>
   );
 }
