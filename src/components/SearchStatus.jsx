@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const SearchStatus = ({ length }) => {
   const phrase = (users) => {
     if (users > 4 && users < 12) {
@@ -20,5 +22,9 @@ const SearchStatus = ({ length }) => {
     </h1>
   );
 };
+
+SearchStatus.propTypes = {
+  length: PropTypes.number.isRequired
+}
 
 export default SearchStatus;
