@@ -1,4 +1,4 @@
-import Bookmark from "./Bookmark";
+import Bookmark from "./BookMark";
 import Qualities from "./Qualities";
 import PropTypes from 'prop-types'
 

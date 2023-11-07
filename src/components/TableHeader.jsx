@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
+import Caret from "./Caret";
 
 const TableHeader = ({ selectedSort, onSort, columns }) => {
   const selectSort = (item) => {
-    if (item === selectedSort.field) {
+    if (item === selectedSort.path) {
       onSort({
         ...selectedSort,
         order: selectedSort.order === "asc" ? "desc" : "asc",
       });
     } else {
-      onSort({ field: item, order: "asc" });
+      onSort({ path: item, order: "asc" });
     }
   };
   return (
@@ -18,13 +19,16 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
           <th
             key={column}
             onClick={
-              columns[column].field
-                ? () => selectSort(columns[column].field)
+              columns[column].path
+                ? () => selectSort(columns[column].path)
                 : undefined
             }
-            role={columns[column].field && "button"}
+            role={columns[column].path && "button"}
           >
             {columns[column].name}
+            {selectedSort.path === columns[column].path && (
+              <Caret order={selectedSort.order} />
+            )}
           </th>
         ))}
       </tr>

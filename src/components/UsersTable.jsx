@@ -1,6 +1,9 @@
+import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
-import User from "./User";
 import PropTypes from "prop-types";
+import Qualities from "./Qualities.jsx";
+import BookMark from "./BookMark.jsx";
+import Table from "./Table";
 
 const UsersTable = ({
   visibleUsers,
@@ -10,32 +13,42 @@ const UsersTable = ({
   onSort,
 }) => {
   const columns = {
-    name: { field: "name", name: "Имя" },
-    qualities: { name: "Качества" },
-    professions: { field: "profession.name", name: "Профессия" },
-    completedMeetings: { field: "completedMeetings", name: "Встретился раз" },
-    rate: { field: "rate", name: "Оценка" },
-    bookmark: { field: "bookmark", name: "Израбанное" },
-    delete: {},
+    name: { path: "name", name: "Имя" },
+    qualities: {
+      name: "Качества",
+      component: (user) => <Qualities qualities={user.qualities} />,
+    },
+    professions: { path: "profession.name", name: "Профессия" },
+    completedMeetings: {
+      path: "completedMeetings",
+      name: "Встретился, раз",
+    },
+    rate: { path: "rate", name: "Оценка" },
+    bookmark: {
+      path: "bookmark",
+      name: "Избранное",
+      component: (user) => (
+        <BookMark id={user._id} onToggle={toggleBookmark} {...user} />
+      ),
+    },
+    delete: {
+      component: (user) => (
+        <button
+          onClick={() => handleDelete(user._id)}
+          className="btn btn-danger"
+        >
+          delete
+        </button>
+      ),
+    },
   };
   return (
-    <table className="table">
-      <TableHeader
-        columns={columns}
-        selectedSort={currentSort}
-        onSort={onSort}
-      />
-      <tbody>
-        {visibleUsers.map((user) => (
-          <User
-            key={user._id}
-            {...user}
-            onDelete={handleDelete}
-            onToggle={toggleBookmark}
-          />
-        ))}
-      </tbody>
-    </table>
+    <Table
+      data={visibleUsers}
+      columns={columns}
+      selectedSort={currentSort}
+      onSort={onSort}
+    />
   );
 };
 

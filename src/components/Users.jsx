@@ -13,7 +13,7 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState();
   const [currentSort, setCurrentSort] = useState({
-    field: "name",
+    path: "name",
     order: "asc",
   });
   const pageSize = 3;
@@ -40,7 +40,7 @@ const Users = () => {
 
   const sortedUsers = _.orderBy(
     filteredUsers,
-    [currentSort.field],
+    [currentSort.path],
     [currentSort.order]
   );
   const visibleUsers = paginate(sortedUsers, currentPage, pageSize);
