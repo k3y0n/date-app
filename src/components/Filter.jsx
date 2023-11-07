@@ -7,7 +7,6 @@ const Filter = ({
   valueProperty,
   contentProperty,
   onItemSelect,
-  selectedItem,
 }) => {
   return (
     <ul className="list-group">
@@ -16,7 +15,7 @@ const Filter = ({
             <li
               key={item[valueProperty]}
               className={
-                "list-group-item" + (item === selectedItem ? " active" : "")
+                "list-group-item" + (item === profession ? " active" : "")
               }
               onClick={() => onItemSelect(item)}
               role="button"
@@ -29,7 +28,7 @@ const Filter = ({
               key={items[item][valueProperty]}
               className={
                 "list-group-item" +
-                (items[item] === selectedItem ? " active" : "")
+                (items[item] === profession ? " active" : "")
               }
               onClick={() => onItemSelect(items[item])}
               role="button"
