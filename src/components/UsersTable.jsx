@@ -1,5 +1,4 @@
-import TableBody from "./TableBody";
-import TableHeader from "./TableHeader";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Qualities from "./Qualities.jsx";
 import BookMark from "./BookMark.jsx";
@@ -13,7 +12,11 @@ const UsersTable = ({
   onSort,
 }) => {
   const columns = {
-    name: { path: "name", name: "Имя" },
+    name: {
+      path: "name",
+      name: "Имя",
+      component: (user) => <Link to={`${user._id}`}>{user.name}</Link>,
+    },
     qualities: {
       name: "Качества",
       component: (user) => <Qualities qualities={user.qualities} />,

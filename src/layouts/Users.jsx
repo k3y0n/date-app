@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import API from "../api";
-import SearchStatus from "./SearchStatus";
-import Pagination from "./Pagination";
+import SearchStatus from "../components/SearchStatus";
+import Pagination from "../components/Pagination";
 import { paginate } from "../utils/pagination";
-import Filter from "./Filter";
-import UsersTable from "./UsersTable";
+import Filter from "../components/Filter";
+import UsersTable from "../components/UsersTable";
 import _ from "lodash";
 
 const Users = () => {
@@ -71,41 +71,45 @@ const Users = () => {
 
   return (
     <>
-      <div className="d-flex gap-5 p-3">
-        <div className="d-flex flex-column gap-2 ">
-          <Filter
-            items={professions}
-            profession={selectedProfession}
-            onItemSelect={handleProfessionSelect}
-          />
-          <button
-            className="btn btn-primary"
-            onClick={() => setSelectedProfession()}
-          >
-            Очистить фильтры
-          </button>
-        </div>
-        <div className="d-flex flex-column">
-          <SearchStatus length={filteredUsers.length} />
-          {visibleUsers.length > 0 && (
-            <UsersTable
-              visibleUsers={visibleUsers}
-              currentSort={currentSort}
-              handleDelete={handleDelete}
-              toggleBookmark={toggleBookmark}
-              onSort={handleSort}
+      {visibleUsers.length > 0 ? (
+        <div className="d-flex gap-5 p-3">
+          <div className="d-flex flex-column gap-2 ">
+            <Filter
+              items={professions}
+              profession={selectedProfession}
+              onItemSelect={handleProfessionSelect}
             />
-          )}
-          <div className="d-flex justify-content-center">
-            <Pagination
-              itemsCount={filteredUsers.length}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={handlePage}
-            />
+            <button
+              className="btn btn-primary"
+              onClick={() => setSelectedProfession()}
+            >
+              Очистить фильтры
+            </button>
+          </div>
+          <div className="d-flex flex-column">
+            <SearchStatus length={filteredUsers.length} />
+            {visibleUsers.length > 0 && (
+              <UsersTable
+                visibleUsers={visibleUsers}
+                currentSort={currentSort}
+                handleDelete={handleDelete}
+                toggleBookmark={toggleBookmark}
+                onSort={handleSort}
+              />
+            )}
+            <div className="d-flex justify-content-center">
+              <Pagination
+                itemsCount={filteredUsers.length}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePage}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        "Loading..."
+      )}
     </>
   );
 };
