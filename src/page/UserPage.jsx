@@ -25,7 +25,6 @@ const UserPage = ({ userId }) => {
           <p>completedMeetings: {user.completedMeetings}</p>
           <h2>Rate: {user.rate}</h2>
           <button className="btn btn-primary" onClick={handleClick}>
-            {" "}
             Все Пользователи
           </button>
         </div>
