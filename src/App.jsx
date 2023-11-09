@@ -11,8 +11,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="login" element={<Login />} />
-        <Route path="users" element={<Users />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/users" element={<Users />}>
           <Route path=":id" element={<UserPage />} />
         </Route>
       </Routes>

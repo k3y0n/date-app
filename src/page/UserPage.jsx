@@ -5,7 +5,7 @@ import API from "../api";
 const UserPage = () => {
   const id = useParams();
   const [user, setUser] = useState();
-
+  console.log(id);
   useEffect(() => {
     API.users.getById(id).then((user) => setUser(user));
   }, [id]);
