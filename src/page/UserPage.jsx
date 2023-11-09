@@ -1,18 +1,38 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API from "../api";
+import Qualities from "../components/Qualities";
 
-const UserPage = () => {
-  const id = useParams();
+const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
-  console.log(id);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    API.users.getById(id).then((user) => setUser(user));
-  }, [id]);
+    API.users.getById(userId).then((user) => setUser(user));
+  }, [userId]);
 
-  console.log(user);
+  const handleClick = () => {
+    navigate("/users");
+  };
 
-  return <div>UserPage</div>;
+  return (
+    <>
+      {user ? (
+        <div>
+          <h1> {user.name}</h1>
+          <h2>Профессия: {user.profession.name}</h2>
+          <Qualities qualities={user.qualities} />
+          <p>completedMeetings: {user.completedMeetings}</p>
+          <h2>Rate: {user.rate}</h2>
+          <button className="btn btn-primary" onClick={handleClick}>
+            Все Пользователи
+          </button>
+        </div>
+      ) : (
+        "Loading..."
+      )}
+    </>
+  );
 };
 
 export default UserPage;
