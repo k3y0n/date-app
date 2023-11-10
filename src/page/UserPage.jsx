@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
 import Qualities from "../components/Qualities";
+import PropTypes from "prop-types";
 
 const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
@@ -33,6 +34,10 @@ const UserPage = ({ userId }) => {
       )}
     </>
   );
+};
+
+UserPage.proptTypes = {
+  userId: PropTypes.number.isRequired,
 };
 
 export default UserPage;
