@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 const Qualities = ({ qualities }) => {
   return (
@@ -16,9 +16,9 @@ Qualities.propTypes = {
   qualities: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired
+      color: PropTypes.string.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default Qualities;

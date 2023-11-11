@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../api";
-import Qualities from "../components/Qualities";
+import API from "../../../api";
+import Qualities from "../../ui/Qualities/Qualities";
 import PropTypes from "prop-types";
 
 const UserPage = ({ userId }) => {

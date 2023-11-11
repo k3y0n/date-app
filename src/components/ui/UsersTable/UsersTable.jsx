@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Qualities from "./Qualities.jsx";
-import BookMark from "./BookMark.jsx";
-import Table from "./Table";
+import Qualities from "../Qualities/Qualities";
+import BookMark from '../../common/Bookmark/Bookmark'
+import Table from '../../common/Table/Table'
 
 const UsersTable = ({
   visibleUsers,
