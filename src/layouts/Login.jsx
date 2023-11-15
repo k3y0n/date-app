@@ -22,7 +22,7 @@ const Login = () => {
             <>
               <LoginForm />
               <p>
-                Don't have account ?{" "}
+                Don't have account ?
                 <a type="button" onClick={toggleForm}>
                   Sign Up
                 </a>
@@ -32,7 +32,7 @@ const Login = () => {
             <>
               <RegisterForm />
               <p>
-                Already have account ?{" "}
+                Already have account ?
                 <a type="button" onClick={toggleForm}>
                   Sign In
                 </a>
