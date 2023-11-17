@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import InputText from "../../common/Form/InputText";
+import TextField from "../../common/Form/TextField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
 
@@ -19,15 +19,18 @@ const LoginForm = () => {
   const validateShema = yup.object().shape({
     password: yup
       .string()
-      .required("Password must be provided")
-      .matches(/[A-Z]+/g, "Password must be at least one capital letter")
-      .matches(/\d+/g, "Password must be at least one digit")
-      .matches(/(?=.*[!@#$%^&*])/g, "Password must be at least one spec letter")
-      .min(8, "Password must be minimum 8 characters"),
+      .required("Пароль должен быть введен")
+      .matches(/[A-Z]+/g, "Пароль должен содержать одну заглавную букву")
+      .matches(/\d+/g, "Пароль должен содержать одну цифру")
+      .matches(
+        /(?=.*[!@#$%^&*])/g,
+        "Пароль должен содержать один специальный символ"
+      )
+      .min(8, "Пароль должен быть не меньше 8 символов"),
     email: yup
       .string()
-      .required("Email must be provided")
-      .email("Email  not correct"),
+      .required("Email должен быть введен")
+      .matches(/^\S+@\S+\.\S+$/g, "Email  не правильный"),
   });
 
   useEffect(() => {
@@ -50,15 +53,15 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
-      <InputText
+      <TextField
         label="Email"
         name="email"
         onChange={handleChange}
         value={data.email}
         error={errors.email}
       />
-      <InputText
-        label="Password"
+      <TextField
+        label="Пароль"
         name="password"
         onChange={handleChange}
         type="password"
@@ -70,10 +73,10 @@ const LoginForm = () => {
         name="remembered"
         onChange={handleChange}
       >
-        Remember me
+        Запомнить меня
       </CheckBoxField>
       <button className="btn btn-primary w-100" disabled={!isValid}>
-        Submit
+        Войти
       </button>
     </form>
   );

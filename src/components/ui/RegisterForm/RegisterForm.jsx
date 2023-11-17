@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import InputText from "../../common/Form/InputText";
+import TextField from "../../common/Form/TextField";
 import API from "../../../api/index";
 import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
@@ -12,21 +12,30 @@ const RegisterForm = () => {
     email: "",
     password: "",
     profession: "",
-    sex: "",
+    sex: "male",
     qualities: [],
     license: false,
   });
+  const [professions, setProfessions] = useState([]);
+  const [qualities, setQualities] = useState([]);
   const [errors, setErrors] = useState({});
-  const [professions, setProfessions] = useState();
-  const [qualities, setQualities] = useState();
   const isValid = Object.keys(errors).length === 0;
 
   useEffect(() => {
     API.professions.fetchAll().then((data) => {
-      setProfessions(data);
+      const professionsList = Object.keys(data).map((professionName) => ({
+        label: data[professionName].name,
+        value: data[professionName]._id,
+      }));
+      setProfessions(professionsList);
     });
     API.qualities.fetchAll().then((data) => {
-      setQualities(data);
+      const qualitiesList = Object.keys(data).map((optionName) => ({
+        value: data[optionName]._id,
+        label: data[optionName].name,
+        color: data[optionName].color,
+      }));
+      setQualities(qualitiesList);
     });
   }, []);
 
@@ -39,20 +48,20 @@ const RegisterForm = () => {
   }, [data]);
 
   const validateShema = yup.object().shape({
-    sex: yup.string().required("Choose your gender"),
-    license: yup.string().required("You must be agree with license"),
-    profession: yup.string().required("Profession must be provided"),
+    sex: yup.string().required("Выберете ваш пол"),
+    license: yup.string().required("Вы должны быть согласны с лицензией"),
+    profession: yup.string().required("Профессия должна быть выбрана"),
     password: yup
       .string()
-      .required("Password must be provided")
-      .matches(/[A-Z]+/g, "Password must be at least one capital letter")
-      .matches(/\d+/g, "Password must be at least one digit")
-      .matches(/(?=.*[!@#$%^&*])/g, "Password must be at least one spec letter")
-      .min(8, "Password must be minimum 8 characters"),
+      .required("Пароль должен быть введен")
+      .matches(/[A-Z]+/g, "Пароль должен содержать одну заглавную букву")
+      .matches(/\d+/g, "Пароль должен содержать одну цифру")
+      .matches(/(?=.*[!@#$%^&*])/g, "Пароль должен содержать один специальный символ")
+      .min(8, "Пароль должен быть не меньше 8 символов"),
     email: yup
       .string()
-      .required("Email must be provided")
-      .email("Email  not correct"),
+      .required("Email должен быть введен")
+      .matches(/^\S+@\S+\.\S+$/g, "Email  не правильный"),
   });
 
   const validate = () => {
@@ -71,32 +80,31 @@ const RegisterForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
-      <InputText
+      <TextField
         label="Email"
         name="email"
         onChange={handleChange}
         value={data.email}
         error={errors.email}
       />
-      <InputText
-        label="Password"
+      <TextField
+        label="Пароль"
         name="password"
         onChange={handleChange}
         type="password"
         value={data.password}
         error={errors.password}
       />
-      {professions && (
-        <SelectField
-          label="Select your profession"
-          name="profession"
-          defaultOption="Select..."
-          onChange={handleChange}
-          options={professions}
-          value={data.profession}
-          error={errors.profession}
-        />
-      )}
+
+      <SelectField
+        label="Выберете свою профессию"
+        name="profession"
+        defaultOption="Select..."
+        onChange={handleChange}
+        options={professions}
+        value={data.profession}
+        error={errors.profession}
+      />
       <RadioField
         options={[
           { name: "Male", value: "male" },
@@ -104,27 +112,26 @@ const RegisterForm = () => {
         ]}
         value={data.sex}
         name="sex"
-        label="Sex"
+        label="Пол"
         onChange={handleChange}
       />
-      {qualities && (
-        <MultiSelectField
-          onChange={handleChange}
-          options={qualities}
-          name="qualities"
-          label="Qualities"
-        />
-      )}
+      <MultiSelectField
+        onChange={handleChange}
+        options={qualities}
+        defaultValue={data.qualities}
+        name="qualities"
+        label="Качества"
+      />
       <CheckBoxField
         value={data.license}
         name="license"
         onChange={handleChange}
         error={errors.license}
       >
-        Agree with license
+        Согласен с лицензией
       </CheckBoxField>
       <button className="btn btn-primary w-100" disabled={!isValid}>
-        Submit
+        Зарегестрироваться
       </button>
     </form>
   );

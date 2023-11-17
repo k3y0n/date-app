@@ -7,7 +7,7 @@ const Login = () => {
   const { type } = useParams();
   const state = type === "register" ? "register" : "login";
   const [formType, setFormType] = useState(state);
-  const title = formType === "register" ? "Registration" : "Login";
+  const title = formType === "register" ? "Регистрация" : "Авторизация";
 
   const toggleForm = () => {
     setFormType((prev) => (prev === "register" ? "login" : "register"));
@@ -22,9 +22,9 @@ const Login = () => {
             <>
               <LoginForm />
               <p>
-                Don't have account ?
+                Нет аккаунта ?
                 <a type="button" onClick={toggleForm}>
-                  Sign Up
+                  Зарегистрироваться
                 </a>
               </p>
             </>
@@ -32,9 +32,9 @@ const Login = () => {
             <>
               <RegisterForm />
               <p>
-                Already have account ?
+                У вас уже есть аккаунт ?
                 <a type="button" onClick={toggleForm}>
-                  Sign In
+                  Войти
                 </a>
               </p>
             </>

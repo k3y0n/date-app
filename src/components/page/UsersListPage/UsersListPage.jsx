@@ -3,10 +3,10 @@ import API from "../../../api/index";
 import SearchStatus from "../../ui/SearchStatus/SearchStatus";
 import Search from "../../common/Search/Search";
 import UsersTable from "../../ui/UsersTable/UsersTable";
-import Filter  from '../../common/Filter/Filter'
-import Pagination from '../../common/Pagination/Pagination'
+import Filter from "../../common/Filter/Filter";
+import Pagination from "../../common/Pagination/Pagination";
 import _ from "lodash";
-import {paginate} from '../../../utils/pagination'
+import { paginate } from "../../../utils/pagination";
 
 const UsersListPage = () => {
   const [users, setUsers] = useState([]);
@@ -86,7 +86,7 @@ const UsersListPage = () => {
 
   return (
     <>
-      {visibleUsers.length > 0 ? (
+      {users.length > 0 ? (
         <div className="d-flex gap-5 p-3">
           <div className="d-flex flex-column gap-2 ">
             <Filter
@@ -126,7 +126,7 @@ const UsersListPage = () => {
           </div>
         </div>
       ) : (
-        "Loading..."
+        "Загрузка..."
       )}
     </>
   );

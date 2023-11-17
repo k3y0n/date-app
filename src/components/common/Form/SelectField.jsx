@@ -37,8 +37,8 @@ const SelectField = ({
             {defaultOption}
           </option>
           {optionsArray.map((option) => (
-            <option key={option._id} value={option.name}>
-              {option.name}
+            <option key={option.value} value={option.label}>
+              {option.label}
             </option>
           ))}
         </select>

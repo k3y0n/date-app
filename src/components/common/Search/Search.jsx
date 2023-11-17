@@ -8,7 +8,7 @@ const Search = ({ search, setSearch }) => {
   return (
     <input
       type="text"
-      placeholder="Search user..."
+      placeholder="Имя пользователя..."
       onChange={handleChange}
       value={search}
     />

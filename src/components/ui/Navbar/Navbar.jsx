@@ -6,17 +6,17 @@ const Navbar = () => {
     <ul className="nav">
       <li className="nav-item">
         <Link className="nav-link" aria-current="page" to="/">
-          Main
+          Главная
         </Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link" to="login">
-          Login
+          Авторизация
         </Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link" to="users">
-          Users
+          Пользователи
         </Link>
       </li>
     </ul>

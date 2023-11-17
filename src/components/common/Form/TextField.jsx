@@ -1,9 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const InputText = ({ label, type, name, value, error, onChange }) => {
+const TextField = ({ label, type, name, value, error, onChange }) => {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const getValidClass = () => {
     return "form-control" + (error ? " is-invalid" : "");
   };
@@ -41,11 +41,11 @@ const InputText = ({ label, type, name, value, error, onChange }) => {
   );
 };
 
-InputText.defaultProps = {
+TextField.defaultProps = {
   type: "text",
 };
 
-InputText.propTypes = {
+TextField.propTypes = {
   label: PropTypes.string.isRequired,
   error: PropTypes.string,
   type: PropTypes.string.isRequired,
@@ -54,4 +54,4 @@ InputText.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default InputText;
+export default TextField;
