@@ -15,6 +15,9 @@ const UserPage = ({ userId }) => {
   const handleClick = () => {
     navigate("/users");
   };
+  const handleClickEdit = () => {
+    navigate(`edit`);
+  };
 
   return (
     <>
@@ -28,7 +31,7 @@ const UserPage = ({ userId }) => {
           <button className="btn btn-primary" onClick={handleClick}>
             Все пользователи
           </button>
-          <button className="btn btn-primary" onClick={handleClick}>
+          <button className="btn btn-primary" onClick={handleClickEdit}>
             Редактировать
           </button>
         </div>
@@ -40,7 +43,7 @@ const UserPage = ({ userId }) => {
 };
 
 UserPage.proptTypes = {
-  userId: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default UserPage;
