@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import InputText from "../../common/Form/InputText";
-import { validator } from "../../../utils/validator";
 import API from "../../../api/index";
 import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
 import MultiSelectField from "../../common/Form/MultiSelectField";
+import CheckBoxField from "../../common/Form/CheckBoxField";
+import * as yup from "yup";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -13,6 +14,7 @@ const RegisterForm = () => {
     profession: "",
     sex: "",
     qualities: [],
+    license: false,
   });
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
@@ -36,32 +38,28 @@ const RegisterForm = () => {
     validate();
   }, [data]);
 
-  const validateConfig = {
-    email: {
-      isRequired: { message: "Email must be provided" },
-      isEmail: { message: "Email  not correct" },
-    },
-    password: {
-      isRequired: { message: "Password must be provided" },
-      isCapital: {
-        message: "Password must be at least one capital letter",
-      },
-      isDigit: {
-        message: "Password must be at least one digit ",
-      },
-      isMin: {
-        message: "Password must be minimum 8 characters ",
-        value: 8,
-      },
-    },
-    profession: {
-      isRequired: { message: "Profession must be provided" },
-    },
-  };
+  const validateShema = yup.object().shape({
+    sex: yup.string().required("Choose your gender"),
+    license: yup.string().required("You must be agree with license"),
+    profession: yup.string().required("Profession must be provided"),
+    password: yup
+      .string()
+      .required("Password must be provided")
+      .matches(/[A-Z]+/g, "Password must be at least one capital letter")
+      .matches(/\d+/g, "Password must be at least one digit")
+      .matches(/(?=.*[!@#$%^&*])/g, "Password must be at least one spec letter")
+      .min(8, "Password must be minimum 8 characters"),
+    email: yup
+      .string()
+      .required("Email must be provided")
+      .email("Email  not correct"),
+  });
 
   const validate = () => {
-    const errors = validator(data, validateConfig);
-    setErrors(errors);
+    validateShema
+      .validate(data)
+      .then(() => setErrors({}))
+      .catch((e) => setErrors({ [e.path]: e.message }));
     return Object.keys(errors).length === 0;
   };
 
@@ -117,6 +115,14 @@ const RegisterForm = () => {
           label="Qualities"
         />
       )}
+      <CheckBoxField
+        value={data.license}
+        name="license"
+        onChange={handleChange}
+        error={errors.license}
+      >
+        Agree with license
+      </CheckBoxField>
       <button className="btn btn-primary w-100" disabled={!isValid}>
         Submit
       </button>

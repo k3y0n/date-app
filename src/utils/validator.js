@@ -4,7 +4,11 @@ export const validator = (data, config) => {
     let statusValidate;
     switch (validateField) {
       case "isRequired": {
-        statusValidate = field.trim() === "";
+        if (typeof field === "boolean") {
+          statusValidate = !field;
+        } else {
+          statusValidate = field.trim() === "";
+        }
         break;
       }
       case "isEmail": {
@@ -31,7 +35,7 @@ export const validator = (data, config) => {
       return config.message;
     }
   };
-  
+
   for (const field in data) {
     for (const validateField in config[field]) {
       const hasError = validate(

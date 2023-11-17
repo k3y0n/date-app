@@ -24,10 +24,11 @@ const SelectField = ({
 
   return (
     <div className="mb-4">
-      <label>{label}</label>
+      <label htmlFor={name}>{label}</label>
       <div>
         <select
           className={getValidClass()}
+          id={name}
           name={name}
           value={value}
           onChange={handleChange}
