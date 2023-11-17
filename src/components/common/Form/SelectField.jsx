@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 const SelectField = ({
@@ -7,28 +6,38 @@ const SelectField = ({
   value,
   defaultOption,
   onChange,
-  professions,
+  options,
   error,
 }) => {
   const getValidClass = () => {
     return "form-select" + (error ? " is-invalid" : "");
   };
+
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
+  const optionsArray =
+    !Array.isArray(options) && typeof options === "object"
+      ? Object.values(options)
+      : options;
+
   return (
     <div className="mb-4">
-      <label htmlFor={name}>{label}</label>
+      <label>{label}</label>
       <div>
         <select
           className={getValidClass()}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
         >
           <option disabled value="" defaultValue={defaultOption}>
             {defaultOption}
           </option>
-          {professions.map((profession) => (
-            <option key={profession._id} value={profession.name}>
-              {profession.name}
+          {optionsArray.map((option) => (
+            <option key={option._id} value={option.name}>
+              {option.name}
             </option>
           ))}
         </select>
@@ -44,7 +53,7 @@ SelectField.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  professions: PropTypes.array.isRequired,
+  options: PropTypes.array.isRequired,
 };
 
 export default SelectField;

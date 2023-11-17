@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 const InputText = ({ label, type, name, value, error, onChange }) => {
   const [showPassword, setShowPassword] = useState(false);
+  
   const getValidClass = () => {
     return "form-control" + (error ? " is-invalid" : "");
+  };
+
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
   };
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
+
   return (
     <div className="mb-4">
       <label htmlFor={name}>{label}</label>
@@ -21,7 +27,7 @@ const InputText = ({ label, type, name, value, error, onChange }) => {
           id={name}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           required
         />
         {type === "password" && (

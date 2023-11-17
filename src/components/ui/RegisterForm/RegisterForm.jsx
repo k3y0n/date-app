@@ -3,20 +3,32 @@ import InputText from "../../common/Form/InputText";
 import { validator } from "../../../utils/validator";
 import API from "../../../api/index";
 import SelectField from "../../common/Form/SelectField";
+import RadioField from "../../common/Form/RadioField";
+import MultiSelectField from "../../common/Form/MultiSelectField";
 
 const RegisterForm = () => {
-  const [data, setData] = useState({ email: "", password: "", profession: "" });
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    profession: "",
+    sex: "",
+    qualities: [],
+  });
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
+  const [qualities, setQualities] = useState();
   const isValid = Object.keys(errors).length === 0;
 
   useEffect(() => {
     API.professions.fetchAll().then((data) => {
       setProfessions(data);
     });
+    API.qualities.fetchAll().then((data) => {
+      setQualities(data);
+    });
   }, []);
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
@@ -62,14 +74,14 @@ const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
       <InputText
-        label="email"
+        label="Email"
         name="email"
         onChange={handleChange}
         value={data.email}
         error={errors.email}
       />
       <InputText
-        label="password"
+        label="Password"
         name="password"
         onChange={handleChange}
         type="password"
@@ -82,9 +94,27 @@ const RegisterForm = () => {
           name="profession"
           defaultOption="Select..."
           onChange={handleChange}
-          professions={professions}
+          options={professions}
           value={data.profession}
           error={errors.profession}
+        />
+      )}
+      <RadioField
+        options={[
+          { name: "Male", value: "male" },
+          { name: "Female", value: "female" },
+        ]}
+        value={data.sex}
+        name="sex"
+        label="Sex"
+        onChange={handleChange}
+      />
+      {qualities && (
+        <MultiSelectField
+          onChange={handleChange}
+          options={qualities}
+          name="qualities"
+          label="Qualities"
         />
       )}
       <button className="btn btn-primary w-100" disabled={!isValid}>
