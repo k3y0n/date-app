@@ -18,7 +18,7 @@ const EditUserPage = ({ userId }) => {
           <BackButton />
           <div className="row">
             <div className="col-md-6 offset-md-3 shadow p-4">
-              <EditForm user={user} />
+              <EditForm {...user}/>
             </div>
           </div>
         </div>

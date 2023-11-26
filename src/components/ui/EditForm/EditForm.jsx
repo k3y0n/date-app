@@ -5,15 +5,19 @@ import MultiSelectField from "../../common/Form/MultiSelectField";
 import RadioField from "../../common/Form/RadioField";
 import SelectField from "../../common/Form/SelectField";
 import API from "../../../api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const EditForm = ({ user }) => {
+const EditForm = () => {
+  const { userId } = useParams();
   const navigate = useNavigate();
+  const transformData = (data) => {
+    return data.map((qual) => ({ label: qual.name, value: qual._id }));
+  };
   const [data, setData] = useState({
     name: "",
     email: "",
     profession: "",
-    sex: "",
+    sex: "male",
     qualities: [],
   });
   const [professions, setProfessions] = useState([]);
@@ -21,11 +25,8 @@ const EditForm = ({ user }) => {
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
 
-  const transformData = (data) => {
-    return data.map((qual) => ({ label: qual.name, value: qual._id }));
-  };
   useEffect(() => {
-    API.users.getById(user._id).then(({ profession, qualities, ...data }) =>
+    API.users.getById(userId).then(({ profession, qualities, ...data }) =>
       setData((prevState) => ({
         ...prevState,
         ...data,
@@ -101,13 +102,17 @@ const EditForm = ({ user }) => {
     if (!validate()) return;
     const { profession, qualities } = data;
     API.users
-      .update(id, {
+      .update(userId, {
         ...data,
         profession: getProfessionById(profession),
         qualities: getQualities(qualities),
       })
       .then((data) => navigate(`/users/${data._id}`));
-    console.log(data);
+    console.log({
+      ...data,
+      profession: getProfessionById(profession),
+      qualities: getQualities(qualities),
+    });
   };
 
   return (
