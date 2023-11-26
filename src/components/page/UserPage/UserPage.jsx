@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../api";
-import Qualities from "../../ui/Qualities/Qualities";
 import PropTypes from "prop-types";
+import UserCard from "../../ui/UserCard/UserCard";
+import QualitiesCard from "../../ui/QualitesCard/QualitiesCard";
+import MeetingsCard from "../../ui/MeetingsCard/MeetingsCard";
+import CommentsList from "../../ui/CommentsList/CommentsList";
 
 const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
@@ -22,18 +25,17 @@ const UserPage = ({ userId }) => {
   return (
     <>
       {user ? (
-        <div>
-          <h1> {user.name}</h1>
-          <h2>Профессия: {user.profession.name}</h2>
-          <Qualities qualities={user.qualities} />
-          <p>Кол-во встреч: {user.completedMeetings}</p>
-          <h2>Оценка: {user.rate}</h2>
-          <button className="btn btn-primary" onClick={handleClick}>
-            Все пользователи
-          </button>
-          <button className="btn btn-primary" onClick={handleClickEdit}>
-            Редактировать
-          </button>
+        <div className="container">
+          <div className="row gutters-sm">
+            <div className="col-md-4 mb-3">
+              <UserCard {...user} handleClickEdit={handleClickEdit} />
+              <QualitiesCard qualities={user.qualities} />
+              <MeetingsCard completedMeetings={user.completedMeetings} />
+            </div>
+            <div className="col-md-8">
+              <CommentsList userId={userId} />
+            </div>
+          </div>
         </div>
       ) : (
         "Loading..."

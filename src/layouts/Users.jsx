@@ -5,7 +5,6 @@ import EditUserPage from "../components/page/EditUserPage/EditUserPage";
 
 const Users = () => {
   const params = useParams();
-  console.log(params);
   const { userId, edit } = params;
   return (
     <>
