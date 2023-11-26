@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../../api";
 import PropTypes from "prop-types";
 import EditForm from "../../ui/EditForm/EditForm";
+import BackButton from "../../common/BackButton/BackButton";
 
 const EditUserPage = ({ userId }) => {
   const [user, setUser] = useState();
@@ -14,6 +15,7 @@ const EditUserPage = ({ userId }) => {
     <>
       {user ? (
         <div className="container mt-5">
+          <BackButton />
           <div className="row">
             <div className="col-md-6 offset-md-3 shadow p-4">
               <EditForm user={user} />

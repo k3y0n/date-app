@@ -8,48 +8,31 @@ import API from "../../../api";
 import { useNavigate } from "react-router-dom";
 
 const EditForm = ({ user }) => {
-  const { _id: id, name, email, profession, sex, qualities } = user;
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    profession: "",
+    sex: "",
+    qualities: [],
+  });
+  const [professions, setProfessions] = useState([]);
+  const [qualities, setQualities] = useState([]);
+  const [errors, setErrors] = useState({});
+  const isValid = Object.keys(errors).length === 0;
 
   const transformData = (data) => {
     return data.map((qual) => ({ label: qual.name, value: qual._id }));
   };
-
-  const navigate = useNavigate()
-  const [data, setData] = useState({
-    name: name,
-    email: email,
-    profession: profession.name,
-    sex: sex,
-    qualities: transformData(qualities),
-  });
-
-  const [professions, setProfessions] = useState([]);
-  const [qualitiesList, setQualitiesList] = useState([]);
-  const [errors, setErrors] = useState({});
-  const isValid = Object.keys(errors).length === 0;
-
-  const handleChange = (target) => {
-    setData((prev) => ({ ...prev, [target.name]: target.value }));
-  };
-
-  const validateShema = yup.object().shape({
-    password: yup
-      .string()
-      .required("Пароль должен быть введен")
-      .matches(/[A-Z]+/g, "Пароль должен содержать одну заглавную букву")
-      .matches(/\d+/g, "Пароль должен содержать одну цифру")
-      .matches(
-        /(?=.*[!@#$%^&*])/g,
-        "Пароль должен содержать один специальный символ"
-      )
-      .min(8, "Пароль должен быть не меньше 8 символов"),
-    name: yup
-      .string()
-      .required("Имя должен быть введен")
-      .min(8, "Имя должен быть не меньше 3 символов"),
-  });
-
   useEffect(() => {
+    API.users.getById(user._id).then(({ profession, qualities, ...data }) =>
+      setData((prevState) => ({
+        ...prevState,
+        ...data,
+        qualities: transformData(qualities),
+        profession: profession._id,
+      }))
+    );
     API.professions.fetchAll().then((data) => {
       const professionsList = Object.keys(data).map((professionName) => ({
         label: data[professionName].name,
@@ -63,13 +46,47 @@ const EditForm = ({ user }) => {
         label: data[optionName].name,
         color: data[optionName].color,
       }));
-      setQualitiesList(qualitiesList);
+      setQualities(qualitiesList);
     });
   }, []);
 
   useEffect(() => {
     validate();
   }, [data]);
+
+  const getProfessionById = (id) => {
+    for (const prof of professions) {
+      if (prof.value === id) {
+        return { _id: prof.value, name: prof.label };
+      }
+    }
+  };
+  const getQualities = (elements) => {
+    const qualitiesArray = [];
+    for (const elem of elements) {
+      for (const quality in qualities) {
+        if (elem.value === qualities[quality].value) {
+          qualitiesArray.push({
+            _id: qualities[quality].value,
+            name: qualities[quality].label,
+            color: qualities[quality].color,
+          });
+        }
+      }
+    }
+    return qualitiesArray;
+  };
+
+  const handleChange = (target) => {
+    setData((prev) => ({ ...prev, [target.name]: target.value }));
+  };
+
+  const validateShema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Имя должен быть введен")
+      .min(8, "Имя должен быть не меньше 3 символов"),
+  });
 
   const validate = () => {
     validateShema
@@ -129,14 +146,14 @@ const EditForm = ({ user }) => {
         onChange={handleChange}
       />
       <MultiSelectField
-        onChange={handleChange}
-        options={qualitiesList}
         defaultValue={data.qualities}
+        options={qualities}
+        onChange={handleChange}
         name="qualities"
-        label="Качества"
+        label="Выберите ваши качества"
       />
       <button className="btn btn-primary w-100" disabled={!isValid}>
-        Войти
+        Обновить
       </button>
     </form>
   );

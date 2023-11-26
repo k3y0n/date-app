@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import TextField from "../../common/Form/TextField";
 import API from "../../../api/index";
 import SelectField from "../../common/Form/SelectField";
 import * as yup from "yup";
+import TextAreaField from "../../common/Form/TextAreaField";
+import PropTypes from "prop-types";
 
-const AddComentForm = () => {
-  const [data, setData] = useState({});
+const AddComentForm = ({ onAdd }) => {
+  const [data, setData] = useState({ comment: "", user: "" });
   const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
@@ -24,7 +25,10 @@ const AddComentForm = () => {
     validate();
   }, [data]);
 
-  const validateShema = yup.object().shape({});
+  const validateShema = yup.object().shape({
+    user: yup.string().required("Пользователь должен быть выбран"),
+    comment: yup.string().required("Комментарий не должен быть  пустым"),
+  });
 
   const validate = () => {
     validateShema
@@ -34,37 +38,56 @@ const AddComentForm = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const clearForm = () => {
+    setData({ comment: "", user: "" });
+    setErrors({});
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
+    const { comment, user } = data;
+    const dataSend = { content: comment, userId: user };
+    onAdd(dataSend);
+    clearForm();
     console.log(data);
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="needs-validation">
-      <SelectField
-        label="Выберете пользователя"
-        name="user"
-        defaultOption="Select..."
-        onChange={handleChange}
-        options={users}
-        value={data.users}
-        error={errors.users}
-      />
-      <TextField
-        label="Email"
-        name="email"
-        type="textarea"
-        onChange={handleChange}
-        value={data.email}
-        error={errors.email}
-      />
+  const userList = users.map((user) => ({
+    label: user.name,
+    value: user._id,
+  }));
 
-      <button className="btn btn-primary w-100" disabled={!isValid}>
-        Опубликовать
-      </button>
-    </form>
+  return (
+    <div>
+      <h2>New comment</h2>
+      <form onSubmit={handleSubmit} className="needs-validation">
+        <SelectField
+          label="Выберете пользователя"
+          name="user"
+          defaultOption="Select..."
+          onChange={handleChange}
+          options={userList}
+          value={data.user}
+          error={errors.user}
+        />
+        <TextAreaField
+          minLength="3"
+          name="comment"
+          onChange={handleChange}
+          value={data.comment}
+          error={errors.comment}
+        />
+        <button className="btn btn-primary w-100" disabled={!isValid}>
+          Опубликовать
+        </button>
+      </form>
+    </div>
   );
+};
+
+AddComentForm.propTypes = {
+  onAdd: PropTypes.func.isRequired,
 };
 
 export default AddComentForm;

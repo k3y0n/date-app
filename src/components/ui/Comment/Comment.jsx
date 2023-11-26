@@ -3,7 +3,7 @@ import Card from "../../hoc/Card/Card";
 import { useEffect, useState } from "react";
 import API from "../../../api";
 
-const Comment = ({ content, created_at, userId }) => {
+const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -35,7 +35,10 @@ const Comment = ({ content, created_at, userId }) => {
                         <span className="small">{formateDate(created_at)}</span>
                       </p>
                       <button className="btn btn-sm text-primary d-flex align-items-center">
-                        <i className="bi bi-x-lg"></i>
+                        <i
+                          className="bi bi-x-lg"
+                          onClick={() => handleDelete(_id)}
+                        ></i>
                       </button>
                     </div>
                     <p className="small mb-0">{content}</p>
