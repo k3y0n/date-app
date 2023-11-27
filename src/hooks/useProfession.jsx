@@ -22,6 +22,10 @@ const PorfessionProvider = ({ children }) => {
     }
   };
 
+  const getProfessionById = (id) => {
+    return professions.find((profession) => profession._id === id);
+  };
+
   useEffect(() => {
     getProfessions();
   }, []);
@@ -34,7 +38,9 @@ const PorfessionProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <ProfessionContext.Provider value={{ professions, loading }}>
+    <ProfessionContext.Provider
+      value={{ professions, loading, getProfessionById }}
+    >
       {children}
     </ProfessionContext.Provider>
   );

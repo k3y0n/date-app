@@ -8,11 +8,10 @@ import Pagination from "../../common/Pagination/Pagination";
 import _ from "lodash";
 import { paginate } from "../../../utils/pagination";
 import { useUser } from "../../../hooks/useUser";
-import { useProfessions } from "../../../hooks/useProfession";
 
 const UsersListPage = () => {
   const { users } = useUser();
-  const { professions } = useProfessions();
+  const [professions, setProfessions] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState();
   const [currentSort, setCurrentSort] = useState({
@@ -22,7 +21,11 @@ const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const pageSize = 3;
 
-  console.log(professions);
+  useEffect(() => {
+    API.professions.fetchAll().then((data) => {
+      setProfessions(data);
+    });
+  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -82,7 +85,7 @@ const UsersListPage = () => {
 
   return (
     <>
-      {users.length > 0 && professions ? (
+      {users.length > 0 ? (
         <div className="d-flex gap-5 p-3">
           <div className="d-flex flex-column gap-2 ">
             <Filter
