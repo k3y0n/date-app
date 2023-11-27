@@ -34,8 +34,8 @@ const UserProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <UserContext.Provider value={{ users, getUsers }}>
-      {children}
+    <UserContext.Provider value={{ users }}>
+      {loading ? <h2>Loading...</h2> : children}
     </UserContext.Provider>
   );
 };

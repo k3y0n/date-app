@@ -7,10 +7,12 @@ import Filter from "../../common/Filter/Filter";
 import Pagination from "../../common/Pagination/Pagination";
 import _ from "lodash";
 import { paginate } from "../../../utils/pagination";
+import { useUser } from "../../../hooks/useUser";
+import { useProfessions } from "../../../hooks/useProfession";
 
 const UsersListPage = () => {
-  const [users, setUsers] = useState([]);
-  const [professions, setProfessions] = useState({});
+  const { users } = useUser();
+  const { professions } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState();
   const [currentSort, setCurrentSort] = useState({
@@ -20,14 +22,7 @@ const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const pageSize = 3;
 
-  useEffect(() => {
-    API.users.fetchAll().then((data) => {
-      setUsers(data);
-    });
-    API.professions.fetchAll().then((data) => {
-      setProfessions(data);
-    });
-  }, []);
+  console.log(professions);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -53,7 +48,8 @@ const UsersListPage = () => {
   const visibleUsers = paginate(sortedUsers, currentPage, pageSize);
 
   const handleDelete = (id) => {
-    setUsers(users.filter((user) => user._id !== id));
+    // setUsers(users.filter((user) => user._id !== id));
+    console.log(id);
   };
 
   const toggleBookmark = (id) => {
@@ -86,7 +82,7 @@ const UsersListPage = () => {
 
   return (
     <>
-      {users.length > 0 ? (
+      {users.length > 0 && professions ? (
         <div className="d-flex gap-5 p-3">
           <div className="d-flex flex-column gap-2 ">
             <Filter
