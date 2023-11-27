@@ -15,7 +15,7 @@ const Comments = ({ userId }) => {
         setComments(comments.filter((comment) => comment._id !== id))
       );
   };
-
+  
   const handleSubmit = (data) => {
     console.log("data", data);
     API.comments
@@ -24,7 +24,7 @@ const Comments = ({ userId }) => {
   };
 
   useEffect(() => {
-    API.comments.fetchCommentsForUser(userId).then((data) => setComments(data));
+    API.comments.fetchCommentsForUser(userId).then((data) => setComments(data.reverse()));
   }, []);
 
   return (
