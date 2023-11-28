@@ -22,16 +22,8 @@ const QualityProvider = ({ children }) => {
     }
   };
 
-  const getQualitiesById = (ids) => {
-    const qualities = [];
-    ids.forEach((id) => {
-      quality.forEach((qual) => {
-        if (qual._id === id) {
-          qualities.push(qual);
-        }
-      });
-    });
-    return qualities;
+  const getQualityById = (id) => {
+    return quality.find((qual) => qual._id === id);
   };
 
   useEffect(() => {
@@ -46,9 +38,7 @@ const QualityProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <QualityContext.Provider
-      value={{ quality, loading, getQualitiesById }}
-    >
+    <QualityContext.Provider value={{ quality, loading, getQualityById }}>
       {children}
     </QualityContext.Provider>
   );

@@ -1,17 +1,13 @@
 import PropTypes from "prop-types";
+import Quality from "../Quality/Quality";
 import { useQuality } from "../../../hooks/useQuality";
 
 const Qualities = ({ qualities }) => {
-  const { getQualitiesById } = useQuality();
-  const qualitiData = getQualitiesById(qualities);
+  const { loading } = useQuality();
   return (
     <>
-      {qualitiData
-        ? qualitiData.map((item) => (
-            <span key={item.name} className={`badge text-bg-${item.color} m-2`}>
-              {item.name}
-            </span>
-          ))
+      {!loading
+        ? qualities.map((item) => <Quality id={item} key={item} />)
         : null}
     </>
   );
