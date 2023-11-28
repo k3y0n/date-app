@@ -52,15 +52,15 @@ const UsersListPage = () => {
 
   const handleDelete = (id) => {
     // setUsers(users.filter((user) => user._id !== id));
-    console.log(id);
+    // console.log(id);
   };
 
   const toggleBookmark = (id) => {
-    setUsers(
-      users.map((user) =>
-        user._id === id ? { ...user, bookmark: !user.bookmark } : user
-      )
-    );
+    // setUsers(
+    //   users.map((user) =>
+    //     user._id === id ? { ...user, bookmark: !user.bookmark } : user
+    //   )
+    // );
   };
 
   const handlePage = (page) => {
@@ -79,9 +79,9 @@ const UsersListPage = () => {
 
   const handleSearch = (query) => {
     setSelectedProfession(undefined);
-    console.log(query);
     setSearch(query);
   };
+
 
   return (
     <>

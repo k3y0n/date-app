@@ -39,7 +39,7 @@ const PorfessionProvider = ({ children }) => {
 
   return (
     <ProfessionContext.Provider
-      value={{ professions, loading, getProfessionById }}
+      value={{ loading, getProfessionById }}
     >
       {children}
     </ProfessionContext.Provider>
