@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import TextField from "../../common/Form/TextField";
-import API from "../../../api/index";
 import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
 import MultiSelectField from "../../common/Form/MultiSelectField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
+import { useQuality } from "../../../hooks/useQuality.jsx";
+import { useProfessions } from "../../../hooks/useProfession.jsx";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -16,28 +17,18 @@ const RegisterForm = () => {
     qualities: [],
     license: false,
   });
-  const [professions, setProfessions] = useState([]);
-  const [qualities, setQualities] = useState([]);
+  const { professions } = useProfessions();
+  const { qualities } = useQuality();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
-
-  useEffect(() => {
-    API.professions.fetchAll().then((data) => {
-      const professionsList = Object.keys(data).map((professionName) => ({
-        label: data[professionName].name,
-        value: data[professionName]._id,
-      }));
-      setProfessions(professionsList);
-    });
-    API.qualities.fetchAll().then((data) => {
-      const qualitiesList = Object.keys(data).map((optionName) => ({
-        value: data[optionName]._id,
-        label: data[optionName].name,
-        color: data[optionName].color,
-      }));
-      setQualities(qualitiesList);
-    });
-  }, []);
+  const professionsList = professions.map((p) => ({
+    label: p.name,
+    value: p._id,
+  }));
+  const qualitiesList = qualities.map((q) => ({
+    label: q.name,
+    value: q._id,
+  }));
 
   const handleChange = (target) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
@@ -56,7 +47,10 @@ const RegisterForm = () => {
       .required("Пароль должен быть введен")
       .matches(/[A-Z]+/g, "Пароль должен содержать одну заглавную букву")
       .matches(/\d+/g, "Пароль должен содержать одну цифру")
-      .matches(/(?=.*[!@#$%^&*])/g, "Пароль должен содержать один специальный символ")
+      .matches(
+        /(?=.*[!@#$%^&*])/g,
+        "Пароль должен содержать один специальный символ"
+      )
       .min(8, "Пароль должен быть не меньше 8 символов"),
     email: yup
       .string()
@@ -75,7 +69,11 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(data);
+    const newData = {
+      ...data,
+      qualities: data.qualities.map((q) => ({ value: q.value })),
+    };
+    console.log(newData);
   };
 
   return (
@@ -101,7 +99,7 @@ const RegisterForm = () => {
         name="profession"
         defaultOption="Select..."
         onChange={handleChange}
-        options={professions}
+        options={professionsList}
         value={data.profession}
         error={errors.profession}
       />
@@ -117,7 +115,7 @@ const RegisterForm = () => {
       />
       <MultiSelectField
         onChange={handleChange}
-        options={qualities}
+        options={qualitiesList}
         defaultValue={data.qualities}
         name="qualities"
         label="Качества"

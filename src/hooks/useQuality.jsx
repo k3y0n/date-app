@@ -7,8 +7,8 @@ const QualityContext = React.createContext();
 
 export const useQuality = () => useContext(QualityContext);
 
-const QualityProvider = ({ children }) => {
-  const [quality, setQuality] = useState([]);
+export const QualityProvider = ({ children }) => {
+  const [qualities, setQuality] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,7 +23,7 @@ const QualityProvider = ({ children }) => {
   };
 
   const getQualityById = (id) => {
-    return quality.find((qual) => qual._id === id);
+    return qualities.find((qual) => qual._id === id);
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const QualityProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <QualityContext.Provider value={{ quality, loading, getQualityById }}>
+    <QualityContext.Provider value={{ qualities, loading, getQualityById }}>
       {children}
     </QualityContext.Provider>
   );
@@ -47,5 +47,3 @@ const QualityProvider = ({ children }) => {
 QualityProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-export default QualityProvider;
