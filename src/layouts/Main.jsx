@@ -1,9 +1,26 @@
-import React from 'react'
+import React from "react";
+import useMockData from "../utils/mockData";
 
 const Main = () => {
-  return (
-    <h1>Главная страница</h1>
-  )
-}
+  const { error, progress, status, initialize } = useMockData();
+  const handleClick = () => {
+    initialize();
+  };
 
-export default Main
+  return (
+    <div className="container mt-5">
+      <h1>Главная страница</h1>
+      <h3>Initialize Firebase</h3>
+      <ul>
+        <li>Status:{status}</li>
+        <li>Progress:{progress}</li>
+        {error && <li>Error:{error.message}</li>}
+      </ul>
+      <button className="btn btn-primary" onClick={handleClick}>
+        Initializate
+      </button>
+    </div>
+  );
+};
+
+export default Main;

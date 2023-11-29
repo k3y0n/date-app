@@ -1,3 +1,4 @@
 {
-  "apiEndpoint": "https://date-app-firebase-default-rtdb.europe-west1.firebasedatabase.app/"
+  "apiEndpoint": "https://date-app-firebase-default-rtdb.europe-west1.firebasedatabase.app/",
+  "isFirebase": true
 }
