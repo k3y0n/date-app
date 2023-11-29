@@ -7,8 +7,10 @@ import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
 import { useQuality } from "../../../hooks/useQuality.jsx";
 import { useProfessions } from "../../../hooks/useProfession.jsx";
+import { useAuth } from "../../../hooks/useAuth.jsx";
 
 const RegisterForm = () => {
+  console.log(import.meta.env.DEV.VITE_FIREBASE_KEY)
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -19,6 +21,7 @@ const RegisterForm = () => {
   });
   const { professions } = useProfessions();
   const { qualities } = useQuality();
+  const { signUp } = useAuth();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
   const professionsList = professions.map((p) => ({
@@ -73,6 +76,7 @@ const RegisterForm = () => {
       ...data,
       qualities: data.qualities.map((q) => ({ value: q.value })),
     };
+    signUp(newData);
     console.log(newData);
   };
 

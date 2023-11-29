@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import userService from "../services/user.service";
 import { toast } from "react-toastify";
+import httpService from "../services/http.service";
 
 const UserContext = React.createContext();
 
@@ -22,6 +23,8 @@ const UserProvider = ({ children }) => {
     }
   };
 
+ 
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -41,7 +44,10 @@ const UserProvider = ({ children }) => {
 };
 
 UserProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
 export default UserProvider;
