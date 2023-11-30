@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import TextField from "../../common/Form/TextField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [data, setData] = useState({
@@ -10,27 +12,20 @@ const LoginForm = () => {
     remembered: false,
   });
   const [errors, setErrors] = useState({});
+  const [enterError, setEnterError] = useState(null);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+
   const isValid = Object.keys(errors).length === 0;
 
   const handleChange = (target) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
+    setEnterError(null);
   };
 
   const validateShema = yup.object().shape({
-    password: yup
-      .string()
-      .required("Пароль должен быть введен")
-      .matches(/[A-Z]+/g, "Пароль должен содержать одну заглавную букву")
-      .matches(/\d+/g, "Пароль должен содержать одну цифру")
-      .matches(
-        /(?=.*[!@#$%^&*])/g,
-        "Пароль должен содержать один специальный символ"
-      )
-      .min(8, "Пароль должен быть не меньше 8 символов"),
-    email: yup
-      .string()
-      .required("Email должен быть введен")
-      .matches(/^\S+@\S+\.\S+$/g, "Email  не правильный"),
+    password: yup.string().required("Пароль должен быть введен"),
+    email: yup.string().required("Email должен быть введен"),
   });
 
   useEffect(() => {
@@ -45,10 +40,15 @@ const LoginForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(data);
+    try {
+      await signIn(data);
+      navigate("/");
+    } catch (error) {
+      setEnterError(error.message);
+    }
   };
 
   return (
@@ -75,6 +75,8 @@ const LoginForm = () => {
       >
         Запомнить меня
       </CheckBoxField>
+      {enterError && <p className="text-danger">{enterError}</p>}
+
       <button className="btn btn-primary w-100" disabled={!isValid}>
         Войти
       </button>

@@ -8,8 +8,10 @@ import * as yup from "yup";
 import { useQuality } from "../../../hooks/useQuality.jsx";
 import { useProfessions } from "../../../hooks/useProfession.jsx";
 import { useAuth } from "../../../hooks/useAuth.jsx";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -68,15 +70,19 @@ const RegisterForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     const newData = {
       ...data,
       qualities: data.qualities.map((q) => ({ value: q.value })),
     };
-    signUp(newData);
-    console.log(newData);
+    try {
+      await signUp(newData);
+      navigate('/')
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   return (

@@ -10,8 +10,10 @@ const AuthContext = React.createContext();
 export const useAuth = () => useContext(AuthContext);
 
 const httpAuth = axios.create({
-  baseURL: "123",
-  withCredentials: true,
+  baseURL: "https://identitytoolkit.googleapis.com/v1/",
+  params: {
+    key: import.meta.env.VITE_FIREBASE_KEY,
+  },
 });
 
 const AuthProvider = ({ children }) => {
@@ -25,12 +27,33 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
 
+  const signIn = async ({ email, password }) => {
+    try {
+      const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
+        email,
+        password,
+        returnSecureToken: true,
+      });
+
+      localStorageService.setTokens(data);
+      console.log(data);
+    } catch (error) {
+      setError(error);
+      const { code, message } = error.response.data.error;
+      if (code == 400) {
+        switch (message) {
+          case "INVALID_LOGIN_CREDENTIALS":
+            throw new Error("Email или пароль введены некорректно");
+          default:
+            throw new Error("Слишком много попыток входа. Попробуйте позже");
+        }
+      }
+    }
+  };
+
   const signUp = async ({ email, password, ...rest }) => {
     try {
-      const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${
-        import.meta.env.VITE_FIREBASE_KEY
-      }`;
-      const { data } = await axios.post(url, {
+      const { data } = await httpAuth.post({
         email,
         password,
         returnSecureToken: true,
@@ -41,6 +64,16 @@ const AuthProvider = ({ children }) => {
       console.log(data);
     } catch (error) {
       setError(error);
+      const { code, message } = error.response.data.error;
+      if (code == 400) {
+        if (message === "EMAIL_EXISTS") {
+          const errorObj = {
+            email: "Email already exists",
+            code: 400,
+          };
+          throw errorObj;
+        }
+      }
     }
   };
 
@@ -54,7 +87,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, signUp }}>
+    <AuthContext.Provider value={{ currentUser, signUp, signIn }}>
       {children}
     </AuthContext.Provider>
   );
