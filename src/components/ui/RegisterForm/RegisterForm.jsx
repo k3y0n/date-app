@@ -16,6 +16,7 @@ const RegisterForm = () => {
     email: "",
     password: "",
     profession: "",
+    name: "",
     sex: "male",
     qualities: [],
     license: false,
@@ -56,6 +57,10 @@ const RegisterForm = () => {
         "Пароль должен содержать один специальный символ"
       )
       .min(8, "Пароль должен быть не меньше 8 символов"),
+    name: yup
+      .string()
+      .required("Имя должно быть введено")
+      .min(3, "Имя должно быть не меньше 3 символовов"),
     email: yup
       .string()
       .required("Email должен быть введен")
@@ -75,12 +80,13 @@ const RegisterForm = () => {
     if (!validate()) return;
     const newData = {
       ...data,
-      qualities: data.qualities.map((q) => ({ value: q.value })),
+      qualities: data.qualities.map((q) => q.value),
     };
     try {
       await signUp(newData);
-      navigate('/')
+      navigate("/");
     } catch (error) {
+      console.log("er", error);
       setErrors(error);
     }
   };
@@ -93,6 +99,13 @@ const RegisterForm = () => {
         onChange={handleChange}
         value={data.email}
         error={errors.email}
+      />
+      <TextField
+        label="Имя"
+        name="name"
+        onChange={handleChange}
+        value={data.name}
+        error={errors.name}
       />
       <TextField
         label="Пароль"

@@ -23,8 +23,6 @@ const UserProvider = ({ children }) => {
     }
   };
 
- 
-
   useEffect(() => {
     getUsers();
   }, []);

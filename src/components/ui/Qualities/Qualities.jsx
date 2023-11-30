@@ -14,7 +14,7 @@ const Qualities = ({ qualities }) => {
 };
 
 Qualities.propTypes = {
-  qualities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  qualities: PropTypes.array,
 };
 
 export default Qualities;

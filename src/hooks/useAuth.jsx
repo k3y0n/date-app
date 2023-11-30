@@ -9,7 +9,7 @@ const AuthContext = React.createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-const httpAuth = axios.create({
+export const httpAuth = axios.create({
   baseURL: "https://identitytoolkit.googleapis.com/v1/",
   params: {
     key: import.meta.env.VITE_FIREBASE_KEY,
@@ -20,9 +20,22 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
   const [error, setError] = useState(null);
 
+  const getUser = async () => {
+    try {
+      const { content } = await userService.getCurrentUser();
+      setCurrentUser(content);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (localStorageService.getUserId()) {
+      getUser();
+    }
+  }, []);
+
   useEffect(() => {
     if (!error) {
-      toast(error);
+      toast.error(error);
       setError(null);
     }
   }, [error]);
@@ -34,9 +47,8 @@ const AuthProvider = ({ children }) => {
         password,
         returnSecureToken: true,
       });
-
       localStorageService.setTokens(data);
-      console.log(data);
+      getUser();
     } catch (error) {
       setError(error);
       const { code, message } = error.response.data.error;
@@ -51,27 +63,34 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const randomData = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
   const signUp = async ({ email, password, ...rest }) => {
     try {
-      const { data } = await httpAuth.post({
+      const { data } = await httpAuth.post(`accounts:signUp`, {
         email,
         password,
         returnSecureToken: true,
       });
-
       localStorageService.setTokens(data);
-      await createUser({ _id: data.localId, ...rest });
-      console.log(data);
+      await createUser({
+        _id: data.localId,
+        email,
+        rate: randomData(1, 5),
+        completedMeetings: randomData(0, 200),
+        ...rest,
+      });
     } catch (error) {
-      setError(error);
-      const { code, message } = error.response.data.error;
-      if (code == 400) {
+      const { code, message } = error.response.d;
+      console.log(error);
+      if (code === 400) {
         if (message === "EMAIL_EXISTS") {
-          const errorObj = {
-            email: "Email already exists",
-            code: 400,
+          const errorObject = {
+            email: "Пользователь с таким Email уже существует",
           };
-          throw errorObj;
+          throw errorObject;
         }
       }
     }
@@ -79,7 +98,7 @@ const AuthProvider = ({ children }) => {
 
   const createUser = async (data) => {
     try {
-      const { content } = userService.create(data);
+      const { content } = await userService.create(data);
       setCurrentUser(content);
     } catch (error) {
       setError(error);
