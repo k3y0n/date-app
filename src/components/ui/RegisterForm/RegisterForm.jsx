@@ -10,7 +10,6 @@ import { useProfessions } from "../../../hooks/useProfession.jsx";
 import { useAuth } from "../../../hooks/useAuth.jsx";
 
 const RegisterForm = () => {
-  console.log(import.meta.env.DEV.VITE_FIREBASE_KEY)
   const [data, setData] = useState({
     email: "",
     password: "",
