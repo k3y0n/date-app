@@ -4,6 +4,7 @@ import axios from "axios";
 import userService from "../services/user.service.js";
 import { toast } from "react-toastify";
 import localStorageService from "../services/localstorage.service.js";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -19,17 +20,24 @@ export const httpAuth = axios.create({
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getUser = async () => {
     try {
       const { content } = await userService.getCurrentUser();
       setCurrentUser(content);
-    } catch (error) {}
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+    }
   };
 
   useEffect(() => {
     if (localStorageService.getUserId()) {
       getUser();
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -40,6 +48,12 @@ const AuthProvider = ({ children }) => {
     }
   }, [error]);
 
+  const logout = () => {
+    localStorageService.removeTokens();
+    setCurrentUser(null);
+    navigate("/");
+  };
+
   const signIn = async ({ email, password }) => {
     try {
       const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
@@ -48,7 +62,7 @@ const AuthProvider = ({ children }) => {
         returnSecureToken: true,
       });
       localStorageService.setTokens(data);
-      getUser();
+      await getUser();
     } catch (error) {
       setError(error);
       const { code, message } = error.response.data.error;
@@ -78,6 +92,9 @@ const AuthProvider = ({ children }) => {
       await createUser({
         _id: data.localId,
         email,
+        image:
+          "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
+          email,
         rate: randomData(1, 5),
         completedMeetings: randomData(0, 200),
         ...rest,
@@ -106,8 +123,10 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, signUp, signIn }}>
-      {children}
+    <AuthContext.Provider
+      value={{ currentUser, isLoading, signUp, signIn, logout }}
+    >
+      {isLoading ? "Loading..." : children}
     </AuthContext.Provider>
   );
 };

@@ -14,20 +14,18 @@ const NavProfile = () => {
       <div className="btn dropdown-toggle d-flex align-items-center">
         <div className="me-2">{currentUser.name}</div>
         <img
-          src={
-            "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-            currentUser.name
-          }
-          alt="user_img"
+          src={currentUser.image}
+          alt="user avatar"
+          height="40"
           className="img-responsive rounded-circle"
         />
       </div>
-      <div className={`w-100 dropdown-menu ${isVisible ? "show" : ""}`}>
-        <Link className="dropdown-item" to={`/users/${currentUser._id}`}>
-          Профиль
+      <div className={"w-100 dropdown-menu" + (isVisible ? " show" : "")}>
+        <Link to={`/users/${currentUser._id}`} className="dropdown-item">
+          Profile
         </Link>
-        <Link className="dropdown-item" to="/logout">
-          Выйти
+        <Link to="/logout" className="dropdown-item">
+          Log Out
         </Link>
       </div>
     </div>
