@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import AddComentForm from "../AddComentForm/AddComentForm";
 import CommentsList from "../CommentsList/CommentsList";
 import PropTypes from "prop-types";
+import { useComments } from "../../../hooks/useComments";
 
 const Comments = ({ userId }) => {
   const [comments, setComments] = useState([]);
+  const { createComment } = useComments();
 
   const handleDelete = (id) => {
     API.comments
@@ -15,16 +17,16 @@ const Comments = ({ userId }) => {
         setComments(comments.filter((comment) => comment._id !== id))
       );
   };
-  
+
   const handleSubmit = (data) => {
     console.log("data", data);
-    API.comments
-      .add({ ...data, pageId: userId })
-      .then((data) => setComments([...comments, data]));
+    createComment(data);
   };
 
   useEffect(() => {
-    API.comments.fetchCommentsForUser(userId).then((data) => setComments(data.reverse()));
+    API.comments
+      .fetchCommentsForUser(userId)
+      .then((data) => setComments(data.reverse()));
   }, []);
 
   return (

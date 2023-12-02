@@ -5,13 +5,7 @@ import BookMark from "../../common/Bookmark/Bookmark";
 import Table from "../../common/Table/Table";
 import Professions from "../Professions/Professions";
 
-const UsersTable = ({
-  visibleUsers,
-  currentSort,
-  handleDelete,
-  toggleBookmark,
-  onSort,
-}) => {
+const UsersTable = ({ visibleUsers, currentSort, toggleBookmark, onSort }) => {
   const columns = {
     name: {
       path: "name",
@@ -38,16 +32,6 @@ const UsersTable = ({
         <BookMark id={user._id} onToggle={toggleBookmark} {...user} />
       ),
     },
-    delete: {
-      component: (user) => (
-        <button
-          onClick={() => handleDelete(user._id)}
-          className="btn btn-danger"
-        >
-          delete
-        </button>
-      ),
-    },
   };
   return (
     <Table
@@ -62,7 +46,6 @@ const UsersTable = ({
 UsersTable.propTypes = {
   visibleUsers: PropTypes.array.isRequired,
   currentSort: PropTypes.object.isRequired,
-  handleDelete: PropTypes.func.isRequired,
   toggleBookmark: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
 };

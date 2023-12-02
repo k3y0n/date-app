@@ -23,6 +23,10 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const getUser = (id) => {
+    return users.find((user) => user._id === id);
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -35,7 +39,7 @@ const UserProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <UserContext.Provider value={{ users }}>
+    <UserContext.Provider value={{ users, getUser }}>
       {loading ? <h2>Loading...</h2> : children}
     </UserContext.Provider>
   );

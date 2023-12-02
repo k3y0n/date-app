@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../../../api";
 import PropTypes from "prop-types";
 import UserCard from "../../ui/UserCard/UserCard";
 import QualitiesCard from "../../ui/QualitesCard/QualitiesCard";
 import MeetingsCard from "../../ui/MeetingsCard/MeetingsCard";
 import Comments from "../../ui/Comments/Comments";
+import { useUser } from "../../../hooks/useUser";
+import CommentsProvider from "../../../hooks/useComments";
 
 const UserPage = ({ userId }) => {
-  const [user, setUser] = useState();
+  const { getUser } = useUser();
+  const user = getUser(userId);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    API.users.getById(userId).then((user) => setUser(user));
-  }, [userId]);
-
-  const handleClick = () => {
-    navigate("/users");
-  };
   const handleClickEdit = () => {
     navigate(`edit`);
   };
@@ -33,7 +27,9 @@ const UserPage = ({ userId }) => {
               <MeetingsCard completedMeetings={user.completedMeetings} />
             </div>
             <div className="col-md-8">
-              <Comments userId={userId} />
+              <CommentsProvider>
+                <Comments userId={userId} />
+              </CommentsProvider>
             </div>
           </div>
         </div>

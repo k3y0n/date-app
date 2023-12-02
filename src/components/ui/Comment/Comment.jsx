@@ -20,7 +20,7 @@ const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
                 <img
                   src={
                     "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-                    user.name
+                    user.email
                   }
                   className="rounded-circle shadow-1-strong me-3"
                   alt="avatar"
