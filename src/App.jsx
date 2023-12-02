@@ -9,6 +9,7 @@ import { QualityProvider } from "./hooks/useQuality";
 import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute";
 import LogOut from "./layouts/LogOut";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
           </ProfessionProvider>
         </QualityProvider>
       </AuthProvider>
-      <ToastContainer />
+      <ToastContainer autoClose={1500}/>
     </>
   );
 }

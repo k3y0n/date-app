@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, createContext } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { useAuth } from "./useAuth";
@@ -18,6 +17,31 @@ const CommentsProvider = ({ children }) => {
   const { userId } = useParams();
   const { currentUser } = useAuth();
 
+  useEffect(() => {
+    getComments();
+  }, [userId]);
+
+  const getComments = async () => {
+    try {
+      const { content } = await commentService.getComments(userId);
+      setComments(content);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeComment = async (id) => {
+    try {
+      await commentService.removeComment(id);
+      toast.success("Comment deleted successfully");
+      getComments();
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   const createComment = async (data) => {
     const comment = {
       ...data,
@@ -28,19 +52,25 @@ const CommentsProvider = ({ children }) => {
     };
 
     try {
-      const { content } = await commentService.createComment(comment);
-      console.log(content);
-    //   return content;
+      const { content } = await toast.promise(
+        commentService.createComment(comment),
+        {
+          pending: "Comment is pending",
+          success: "Comment  created 👌",
+          error: "Comment create failed 🤯",
+        }
+      );
+      setComments((prev) => [...prev, content]);
     } catch (error) {
       setError(error);
     }
   };
 
-  useEffect(() => {}, []);
-
   return (
-    <CommentsContext.Provider value={{ createComment }}>
-      {children}
+    <CommentsContext.Provider
+      value={{ comments, createComment, removeComment }}
+    >
+      {isLoading ? "loading" : children}
     </CommentsContext.Provider>
   );
 };

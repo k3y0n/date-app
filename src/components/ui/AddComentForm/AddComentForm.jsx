@@ -38,7 +38,6 @@ const AddComentForm = ({ onAdd }) => {
     if (!validate()) return;
     onAdd(data);
     clearForm();
-    console.log(data);
   };
 
   return (

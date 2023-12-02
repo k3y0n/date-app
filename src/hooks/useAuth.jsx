@@ -56,11 +56,18 @@ const AuthProvider = ({ children }) => {
 
   const signIn = async ({ email, password }) => {
     try {
-      const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
-        email,
-        password,
-        returnSecureToken: true,
-      });
+      const { data } = await toast.promise(
+        httpAuth.post(`accounts:signInWithPassword`, {
+          email,
+          password,
+          returnSecureToken: true,
+        }),
+        {
+          pending: "SingIn is pending",
+          success: "SignIn  succes 👌",
+          error: "SignIn  failed 🤯",
+        }
+      );
       localStorageService.setTokens(data);
       await getUser();
     } catch (error) {
@@ -83,11 +90,18 @@ const AuthProvider = ({ children }) => {
 
   const signUp = async ({ email, password, ...rest }) => {
     try {
-      const { data } = await httpAuth.post(`accounts:signUp`, {
-        email,
-        password,
-        returnSecureToken: true,
-      });
+      const { data } = await toast.promise(
+        httpAuth.post(`accounts:signUp`, {
+          email,
+          password,
+          returnSecureToken: true,
+        }),
+        {
+          pending: "SingUp is pending",
+          success: "SignUp  succes 👌",
+          error: "SignUp  failed 🤯",
+        }
+      );
       localStorageService.setTokens(data);
       await createUser({
         _id: data.localId,

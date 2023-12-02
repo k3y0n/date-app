@@ -1,15 +1,10 @@
+import { useUser } from "../../../hooks/useUser";
 import { formateDate } from "../../../utils/formateDate";
 import Card from "../../hoc/Card/Card";
-import { useEffect, useState } from "react";
-import API from "../../../api";
 
-const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    API.users.getById(userId).then((data) => setUser(data));
-  }, []);
-
+const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
+  const { getUser } = useUser();
+  const user = getUser(userId);
   return (
     <>
       {user && (
@@ -18,10 +13,7 @@ const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
             <div className="col">
               <div className="d-flex flex-start ">
                 <img
-                  src={
-                    "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-                    user.email
-                  }
+                  src={user.image}
                   className="rounded-circle shadow-1-strong me-3"
                   alt="avatar"
                   width="65"
@@ -41,7 +33,7 @@ const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
                         ></i>
                       </button>
                     </div>
-                    <p className="small mb-0">{content}</p>
+                    <p className="small mb-0">{comment}</p>
                   </div>
                 </div>
               </div>

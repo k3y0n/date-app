@@ -1,33 +1,18 @@
 import Card from "../../hoc/Card/Card";
-import API from "../../../api";
-import { useEffect, useState } from "react";
 import AddComentForm from "../AddComentForm/AddComentForm";
 import CommentsList from "../CommentsList/CommentsList";
-import PropTypes from "prop-types";
 import { useComments } from "../../../hooks/useComments";
 
-const Comments = ({ userId }) => {
-  const [comments, setComments] = useState([]);
-  const { createComment } = useComments();
+const Comments = () => {
+  const { comments, createComment, removeComment } = useComments();
 
   const handleDelete = (id) => {
-    API.comments
-      .remove(id)
-      .then((id) =>
-        setComments(comments.filter((comment) => comment._id !== id))
-      );
+    removeComment(id);
   };
 
   const handleSubmit = (data) => {
-    console.log("data", data);
     createComment(data);
   };
-
-  useEffect(() => {
-    API.comments
-      .fetchCommentsForUser(userId)
-      .then((data) => setComments(data.reverse()));
-  }, []);
 
   return (
     <>
@@ -47,10 +32,6 @@ const Comments = ({ userId }) => {
       )}
     </>
   );
-};
-
-Comments.propTypes = {
-  userId: PropTypes.string.isRequired,
 };
 
 export default Comments;
