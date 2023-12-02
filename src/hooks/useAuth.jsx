@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, createContext } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import userService from "../services/user.service.js";
 import { toast } from "react-toastify";
 import localStorageService from "../services/localstorage.service.js";
 
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -17,7 +17,7 @@ export const httpAuth = axios.create({
 });
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
 
   const getUser = async () => {

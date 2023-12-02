@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, createContext } from "react";
 import PropTypes from "prop-types";
 import userService from "../services/user.service";
 import { toast } from "react-toastify";
-import httpService from "../services/http.service";
+// import httpService from "../services/http.service";
 
-const UserContext = React.createContext();
+const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
 

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, createContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import professionService from "../services/profession.service";
 
-const ProfessionContext = React.createContext();
+const ProfessionContext = createContext();
 
 export const useProfessions = () => useContext(ProfessionContext);
 
@@ -49,8 +49,8 @@ const ProfessionProvider = ({ children }) => {
 ProfessionProvider.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-])
+    PropTypes.node,
+  ]),
 };
 
 export default ProfessionProvider;
