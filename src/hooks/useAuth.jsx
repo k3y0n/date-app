@@ -114,7 +114,7 @@ const AuthProvider = ({ children }) => {
         ...rest,
       });
     } catch (error) {
-      const { code, message } = error.response.d;
+      const { code, message } = error.response;
       console.log(error);
       if (code === 400) {
         if (message === "EMAIL_EXISTS") {
@@ -129,16 +129,36 @@ const AuthProvider = ({ children }) => {
 
   const createUser = async (data) => {
     try {
-      const { content } = await userService.create(data);
+      const { content } = await toast.promise(userService.create(data), {
+        pending: "Create User is pending",
+        success: "Create User  succes 👌",
+        error: "Create User  failed 🤯",
+      });
       setCurrentUser(content);
     } catch (error) {
       setError(error);
     }
   };
 
+  const updateUser = async (data) => {
+    try {
+      const { content } = await toast.promise(userService.updateUser(data), {
+        pending: "User update is pending",
+        success: "User update  succes 👌",
+        error: "User update failed 🤯",
+      });
+      await getUser()
+      console.log(content);
+      setCurrentUser(content);
+    } catch (error) {
+      toast.error(error);
+      setError(error);
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ currentUser, isLoading, signUp, signIn, logout }}
+      value={{ currentUser, isLoading, signUp, signIn, logout, updateUser }}
     >
       {isLoading ? "Loading..." : children}
     </AuthContext.Provider>

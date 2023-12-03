@@ -1,9 +1,11 @@
+import { useAuth } from "../../../hooks/useAuth";
 import { useUser } from "../../../hooks/useUser";
 import { formateDate } from "../../../utils/formateDate";
 import Card from "../../hoc/Card/Card";
 
 const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
   const { getUser } = useUser();
+  const { currentUser } = useAuth();
   const user = getUser(userId);
   return (
     <>
@@ -26,12 +28,14 @@ const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
                         <span className="m-1">{user.name}</span>
                         <span className="small">{formateDate(created_at)}</span>
                       </p>
-                      <button className="btn btn-sm text-primary d-flex align-items-center">
-                        <i
-                          className="bi bi-x-lg"
-                          onClick={() => handleDelete(_id)}
-                        ></i>
-                      </button>
+                      {userId === currentUser._id && (
+                        <button className="btn btn-sm text-primary d-flex align-items-center">
+                          <i
+                            className="bi bi-x-lg"
+                            onClick={() => handleDelete(_id)}
+                          ></i>
+                        </button>
+                      )}
                     </div>
                     <p className="small mb-0">{comment}</p>
                   </div>

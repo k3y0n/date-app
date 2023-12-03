@@ -1,29 +1,25 @@
-import { useEffect, useState } from "react";
-import API from "../../../api";
 import PropTypes from "prop-types";
 import EditForm from "../../ui/EditForm/EditForm";
 import BackButton from "../../common/BackButton/BackButton";
+import { useAuth } from "../../../hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const EditUserPage = ({ userId }) => {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    API.users.getById(userId).then((user) => setUser(user));
-  }, [userId]);
+  const { currentUser } = useAuth();
 
   return (
     <>
-      {user ? (
+      {userId === currentUser._id ? (
         <div className="container mt-5">
           <BackButton />
           <div className="row">
             <div className="col-md-6 offset-md-3 shadow p-4">
-              <EditForm {...user}/>
+              <EditForm />
             </div>
           </div>
         </div>
       ) : (
-        "Загрузка..."
+        <Navigate to={`/users/${currentUser._id}/edit`} />
       )}
     </>
   );
