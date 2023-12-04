@@ -4,12 +4,12 @@ import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
 import MultiSelectField from "../../common/Form/MultiSelectField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
-import { useProfessions } from "../../../hooks/useProfession.jsx";
 import { useAuth } from "../../../hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
-import { getQualities, getQualitiesStatus } from "../../../store/qualitySlice.js";
+import { getQualities } from "../../../store/qualitySlice.js";
+import { getProfessions } from "../../../store/professionsSlice.js";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -22,9 +22,8 @@ const RegisterForm = () => {
     qualities: [],
     license: false,
   });
-  const { professions } = useProfessions();
+  const professions = useSelector(getProfessions());
   const qualities = useSelector(getQualities());
-  const qualitiesLoading = useSelector(getQualitiesStatus());
   const { signUp } = useAuth();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;

@@ -23,12 +23,8 @@ const qualitySlice = createSlice({
   },
 });
 
-export const {
-  qualityRequested,
-  qualityRecieved,
-  qualityRejected,
-  getQualityById,
-} = qualitySlice.actions;
+export const { qualityRequested, qualityRecieved, qualityRejected } =
+  qualitySlice.actions;
 
 export const loadQualityList = () => async (dispatch) => {
   dispatch(qualityRequested());

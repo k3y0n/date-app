@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import Card from "../../hoc/Card/Card";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { selectProfessionById } from "../../../store/professionsSlice";
 
 const UserCard = ({ name, email, _id, profession, rate, handleClickEdit }) => {
-  const { getProfessionById } = useProfessions();
+  const professionName = useSelector((state) =>
+    selectProfessionById(state, profession)
+  );
   const { currentUser } = useAuth();
-  const professionName = getProfessionById(profession);
   return (
     <Card className={"card mb-3"}>
       <div className="card-body">
@@ -49,7 +51,7 @@ const UserCard = ({ name, email, _id, profession, rate, handleClickEdit }) => {
 
 UserCard.proptTypes = {
   name: PropTypes.string.isRequired,
-  profession: PropTypes.object.isRequired,
+  profession: PropTypes.string.isRequired,
   rate: PropTypes.string.isRequired,
   handleClickEdit: PropTypes.func.isRequired,
 };

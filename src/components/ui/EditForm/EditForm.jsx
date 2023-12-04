@@ -5,16 +5,20 @@ import MultiSelectField from "../../common/Form/MultiSelectField";
 import RadioField from "../../common/Form/RadioField";
 import SelectField from "../../common/Form/SelectField";
 import { useNavigate } from "react-router-dom";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesStatus } from "../../../store/qualitySlice";
+import {
+  getProfessions,
+  getProfessionsStatus,
+} from "../../../store/professionsSlice";
 
 const EditForm = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const { professions, loading: professionLoading } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionLoading = useSelector(getProfessionsStatus());
   const qualities = useSelector(getQualities());
   const qualitiesLoading = useSelector(getQualitiesStatus());
   const [errors, setErrors] = useState({});
@@ -110,7 +114,6 @@ const EditForm = () => {
 
   return (
     <>
-      {" "}
       {!isLoading && Object.keys(professions).length > 0 ? (
         <form onSubmit={handleSubmit} className="needs-validation">
           <TextField
