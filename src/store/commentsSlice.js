@@ -1,7 +1,7 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comment.service";
 import { nanoid } from "nanoid";
-import { getCurrentUserId } from "./users";
+import { getCurrentUserId } from "./usersSlice.js";
 
 const commentsSlice = createSlice({
   name: "comments",
@@ -37,7 +37,7 @@ const {
   commentsRequestFailed,
   commentCreated,
   commentRemoved,
-} = actions;
+} = commentsSlice.actions;
 
 const addCommentRequested = createAction("comments/addCommentRequested");
 const removeCommentRequested = createAction("comments/removeCommentRequested");
@@ -67,6 +67,7 @@ export const createComment = (payload) => async (dispatch, getState) => {
     dispatch(commentsRequestFailed(error.message));
   }
 };
+
 export const removeComment = (commentId) => async (dispatch) => {
   dispatch(removeCommentRequested());
   try {
@@ -78,6 +79,7 @@ export const removeComment = (commentId) => async (dispatch) => {
     dispatch(commentsRequestFailed(error.message));
   }
 };
+
 export const getComments = () => (state) => state.comments.entities;
 export const getCommentsLoadingStatus = () => (state) =>
   state.comments.isLoading;

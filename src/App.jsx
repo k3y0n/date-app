@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { loadQualityList } from "./store/qualitySlice";
 import { loadProfessionList } from "./store/professionsSlice";
 import { loadUserList } from "./store/usersSlice";
+import { loadCommentsList } from "./store/commentsSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ function App() {
     dispatch(loadQualityList());
     dispatch(loadProfessionList());
     dispatch(loadUserList());
+    dispatch(loadCommentsList());
   }, []);
 
   return (

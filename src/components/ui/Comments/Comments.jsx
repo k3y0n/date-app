@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   createComment,
   getComments,
@@ -9,9 +10,14 @@ import Card from "../../hoc/Card/Card";
 import AddComentForm from "../AddComentForm/AddComentForm";
 import CommentsList from "../CommentsList/CommentsList";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { orderBy } from "lodash";
 
 const Comments = () => {
+  const { userId } = useParams();
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadCommentsList(userId));
   }, [userId]);
