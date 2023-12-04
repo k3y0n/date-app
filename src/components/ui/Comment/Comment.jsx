@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
-import { useAuth } from "../../../hooks/useAuth";
 import { formateDate } from "../../../utils/formateDate";
 import Card from "../../hoc/Card/Card";
-import { selectUserById } from "../../../store/usersSlice";
+import { getCurrentUserData, selectUserById } from "../../../store/usersSlice";
 
 const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
   const user = useSelector(selectUserById(userId));
-  const { currentUser } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
+
   return (
     <>
       {user && (

@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
 import Card from "../../hoc/Card/Card";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { selectProfessionById } from "../../../store/professionsSlice";
+import { getCurrentUserData } from "../../../store/usersSlice";
 
 const UserCard = ({ name, email, _id, profession, rate, handleClickEdit }) => {
   const professionName = useSelector((state) =>
     selectProfessionById(state, profession)
   );
-  const { currentUser } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
+
   return (
     <Card className={"card mb-3"}>
       <div className="card-body">

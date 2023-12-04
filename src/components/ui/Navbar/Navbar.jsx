@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
 import NavProfile from "../NavProfile/NavProfile";
+import { useSelector } from "react-redux";
+import { getCurrentUserData } from "../../../store/usersSlice";
 
 const Navbar = () => {
-  const { currentUser } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
 
   return (
     <nav className="navbar bg-light mb-3">

@@ -6,17 +6,16 @@ import Filter from "../../common/Filter/Filter";
 import Pagination from "../../common/Pagination/Pagination";
 import _ from "lodash";
 import { paginate } from "../../../utils/pagination";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import {
   getProfessions,
   getProfessionsStatus,
 } from "../../../store/professionsSlice";
-import { getUsers } from "../../../store/usersSlice";
+import { getCurrentUserId, getUsers } from "../../../store/usersSlice";
 
 const UsersListPage = () => {
   const users = useSelector(getUsers());
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
   const professions = useSelector(getProfessions());
   const professionLoading = useSelector(getProfessionsStatus());
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +39,7 @@ const UsersListPage = () => {
             JSON.stringify(selectedProfession)
         )
       : data;
-    return filteredUsers.filter((user) => user._id !== currentUser._id);
+    return filteredUsers.filter((user) => user._id !== currentUserId);
   };
 
   const filteredUsers = filterUsers(users);

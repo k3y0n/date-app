@@ -1,15 +1,16 @@
 import PropTypes from "prop-types";
 import EditForm from "../../ui/EditForm/EditForm";
 import BackButton from "../../common/BackButton/BackButton";
-import { useAuth } from "../../../hooks/useAuth";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getCurrentUserId } from "../../../store/usersSlice";
 
 const EditUserPage = ({ userId }) => {
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
 
   return (
     <>
-      {userId === currentUser._id ? (
+      {userId === currentUserId ? (
         <div className="container mt-5">
           <BackButton />
           <div className="row">
@@ -19,7 +20,7 @@ const EditUserPage = ({ userId }) => {
           </div>
         </div>
       ) : (
-        <Navigate to={`/users/${currentUser._id}/edit`} />
+        <Navigate to={`/users/${currentUserId}/edit`} />
       )}
     </>
   );
