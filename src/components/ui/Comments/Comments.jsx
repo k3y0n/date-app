@@ -1,18 +1,32 @@
+import {
+  createComment,
+  getComments,
+  getCommentsLoadingStatus,
+  loadCommentsList,
+  removeComment,
+} from "../../../store/commentsSlice";
 import Card from "../../hoc/Card/Card";
 import AddComentForm from "../AddComentForm/AddComentForm";
 import CommentsList from "../CommentsList/CommentsList";
-import { useComments } from "../../../hooks/useComments";
+import { useDispatch, useSelector } from "react-redux";
 
 const Comments = () => {
-  const { comments, createComment, removeComment } = useComments();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadCommentsList(userId));
+  }, [userId]);
 
-  const handleDelete = (id) => {
-    removeComment(id);
-  };
+  const isLoading = useSelector(getCommentsLoadingStatus());
+  const comments = useSelector(getComments());
 
   const handleSubmit = (data) => {
-    createComment(data);
+    dispatch(createComment({ ...data, pageId: userId }));
   };
+  const handleRemoveComment = (id) => {
+    dispatch(removeComment(id));
+  };
+
+  const sortedComments = orderBy(comments, ["created_at"], ["desc"]);
 
   return (
     <>
@@ -26,7 +40,14 @@ const Comments = () => {
           <div className="card-body ">
             <h2>Comments</h2>
             <hr />
-            <CommentsList comments={comments} onRemove={handleDelete} />
+            {!isLoading ? (
+              <CommentsList
+                comments={sortedComments}
+                onRemove={handleRemoveComment}
+              />
+            ) : (
+              "Loading..."
+            )}
           </div>
         </Card>
       )}

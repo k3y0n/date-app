@@ -10,6 +10,7 @@ const NavProfile = () => {
   const toggleShow = () => {
     setVisible((prev) => !prev);
   };
+  
   return (
     <div className="dropdown" onClick={toggleShow}>
       <div className="btn dropdown-toggle d-flex align-items-center">

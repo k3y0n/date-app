@@ -5,16 +5,25 @@ import localStorageService from "../services/localstorage.service";
 import { randomData } from "../utils/randomData";
 import { toast } from "react-toastify";
 
+const initialState = localStorageService.getToken()
+  ? {
+      enteties: null,
+      isLoading: true,
+      error: null,
+      auth: { userId: localStorageService.getUserId() },
+      isLoggedIn: true,
+    }
+  : {
+      enteties: null,
+      isLoading: false,
+      error: null,
+      auth: null,
+      isLoggedIn: false,
+    };
+
 const usersSlice = createSlice({
   name: "users",
-  initialState: {
-    enteties: null,
-    isLoading: true,
-    error: null,
-    auth: null,
-    currentUser: {},
-    isLoggedIn: false,
-  },
+  initialState,
   reducers: {
     userRequested: (state) => {
       state.isLoading = true;
@@ -146,6 +155,11 @@ export const loadUserList = () => async (dispatch) => {
   }
 };
 
+export const logOut = () => (dispatch) => {
+  localStorageService.removeTokens();
+  dispatch(userLoggedOut());
+};
+
 export const getUsers = () => (state) => state.users.enteties;
 export const getUsersStatus = () => (state) => state.users.isLoading;
 export const selectUserById = (userId) => (state) => {
@@ -157,8 +171,8 @@ export const selectUserById = (userId) => (state) => {
 export const getIsLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
 export const getCurrentUserData = () => (state) => {
-  return state.users.entities
-    ? state.users.entities.find((u) => u._id === state.users.auth.userId)
+  return state.users.enteties
+    ? state.users.enteties.find((u) => u._id === state.users.auth.userId)
     : null;
 };
 
