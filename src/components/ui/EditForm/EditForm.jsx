@@ -6,15 +6,17 @@ import RadioField from "../../common/Form/RadioField";
 import SelectField from "../../common/Form/SelectField";
 import { useNavigate } from "react-router-dom";
 import { useProfessions } from "../../../hooks/useProfession";
-import { useQuality } from "../../../hooks/useQuality";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesStatus } from "../../../store/qualitySlice";
 
 const EditForm = () => {
   const navigate = useNavigate();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { professions, loading: professionLoading } = useProfessions();
-  const { qualities, loading: qualitiesLoading } = useQuality();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesStatus());
   const [errors, setErrors] = useState({});
   const { currentUser, updateUser } = useAuth();
   const isValid = Object.keys(errors).length === 0;

@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import { useQuality } from "../../../hooks/useQuality";
+import { useSelector } from "react-redux";
+import { selectQualityById } from "../../../store/qualitySlice";
 
 const Quality = ({ id }) => {
-  const { getQualityById } = useQuality();
-  const { name, color } = getQualityById(id);
+  const quality = useSelector((state) => selectQualityById(state, id));
+  const { name, color } = quality;
   return <span className={`badge text-bg-${color} m-2`}>{name}</span>;
 };
 
