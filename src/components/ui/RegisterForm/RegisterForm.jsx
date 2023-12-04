@@ -4,15 +4,16 @@ import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
 import MultiSelectField from "../../common/Form/MultiSelectField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
-import { useAuth } from "../../../hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities } from "../../../store/qualitySlice.js";
 import { getProfessions } from "../../../store/professionsSlice.js";
+import { signUp } from "../../../store/usersSlice.js";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -24,7 +25,6 @@ const RegisterForm = () => {
   });
   const professions = useSelector(getProfessions());
   const qualities = useSelector(getQualities());
-  const { signUp } = useAuth();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
   const professionsList = professions.map((p) => ({
@@ -47,6 +47,7 @@ const RegisterForm = () => {
   const validateShema = yup.object().shape({
     sex: yup.string().required("Выберете ваш пол"),
     license: yup.string().required("Вы должны быть согласны с лицензией"),
+    qualities: yup.array().required("Выберете ваши качеста"),
     profession: yup.string().required("Профессия должна быть выбрана"),
     password: yup
       .string()
@@ -76,20 +77,15 @@ const RegisterForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
     const newData = {
       ...data,
       qualities: data.qualities.map((q) => q.value),
     };
-    try {
-      await signUp(newData);
-      navigate("/");
-    } catch (error) {
-      console.log("er", error);
-      setErrors(error);
-    }
+    dispatch(signUp(newData));
+    navigate("/");
   };
 
   return (

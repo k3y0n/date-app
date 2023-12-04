@@ -32,7 +32,7 @@ export const loadQualityList = () => async (dispatch) => {
     const { content } = await qualityService.get();
     dispatch(qualityRecieved(content));
   } catch (error) {
-    dispatch(qualityRejected(error));
+    dispatch(qualityRejected(error.message));
   }
 };
 

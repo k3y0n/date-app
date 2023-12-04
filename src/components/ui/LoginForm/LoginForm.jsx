@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import TextField from "../../common/Form/TextField";
 import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
-import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../../store/usersSlice";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -13,7 +15,6 @@ const LoginForm = () => {
   });
   const [errors, setErrors] = useState({});
   const [enterError, setEnterError] = useState(null);
-  const { signIn } = useAuth();
   const navigate = useNavigate();
 
   const isValid = Object.keys(errors).length === 0;
@@ -40,15 +41,11 @@ const LoginForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    try {
-      await signIn(data);
-      navigate("/");
-    } catch (error) {
-      setEnterError(error.message);
-    }
+    dispatch(signIn(data));
+    navigate("/users");
   };
 
   return (

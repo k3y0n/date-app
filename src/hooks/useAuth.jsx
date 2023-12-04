@@ -84,10 +84,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const randomData = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
   const signUp = async ({ email, password, ...rest }) => {
     try {
       const { data } = await toast.promise(
@@ -147,7 +143,7 @@ const AuthProvider = ({ children }) => {
         success: "User update  succes 👌",
         error: "User update failed 🤯",
       });
-      await getUser()
+      await getUser();
       console.log(content);
       setCurrentUser(content);
     } catch (error) {

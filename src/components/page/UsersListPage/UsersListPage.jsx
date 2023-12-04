@@ -6,16 +6,16 @@ import Filter from "../../common/Filter/Filter";
 import Pagination from "../../common/Pagination/Pagination";
 import _ from "lodash";
 import { paginate } from "../../../utils/pagination";
-import { useUser } from "../../../hooks/useUser";
 import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import {
   getProfessions,
   getProfessionsStatus,
 } from "../../../store/professionsSlice";
+import { getUsers } from "../../../store/usersSlice";
 
 const UsersListPage = () => {
-  const { users } = useUser();
+  const users = useSelector(getUsers());
   const { currentUser } = useAuth();
   const professions = useSelector(getProfessions());
   const professionLoading = useSelector(getProfessionsStatus());
@@ -27,7 +27,6 @@ const UsersListPage = () => {
   });
   const [search, setSearch] = useState("");
   const pageSize = 3;
-
 
   useEffect(() => {
     setCurrentPage(1);
