@@ -43,15 +43,15 @@ const EditForm = () => {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   validate();
-  // }, [data]);
+  useEffect(() => {
+    validate();
+  }, [data]);
 
   const handleChange = (target) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const validateShema = yup.object().shape({
+  const validateSchema = yup.object().shape({
     name: yup
       .string()
       .required("Имя должно быть введено")
@@ -92,7 +92,7 @@ const EditForm = () => {
   }, [professionLoading, qualitiesLoading, currentUser, data]);
 
   const validate = () => {
-    validateShema
+    validateSchema
       .validate(data)
       .then(() => setErrors({}))
       .catch((e) => setErrors({ [e.path]: e.message }));
@@ -101,13 +101,16 @@ const EditForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
-    const newData = {
-      ...data,
-      qualities: data.qualities.map((q) => q.value),
-    };
-    dispatch(updateUser(newData));
-    navigate(`/users/${currentUser._id}`);
+    if (!isValid) {
+      return;
+    } else {
+      const newData = {
+        ...data,
+        qualities: data.qualities.map((q) => q.value),
+      };
+      dispatch(updateUser(newData));
+      navigate(`/users/${currentUser._id}`);
+    }
   };
 
   return (

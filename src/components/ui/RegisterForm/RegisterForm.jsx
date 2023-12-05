@@ -67,30 +67,26 @@ const RegisterForm = () => {
       .matches(/^\S+@\S+\.\S+$/g, "Email  не правильный"),
   });
 
-  const validate = async () => {
-    try {
-      await validateSchema.validate(data, { abortEarly: false });
-      setErrors({});
-      return true;
-    } catch (e) {
-      const newErrors = {};
-      e.inner.forEach((error) => {
-        newErrors[error.path] = error.message;
-      });
-      setErrors(newErrors);
-      return false;
-    }
+  const validate = () => {
+    validateSchema
+      .validate(data)
+      .then(() => setErrors({}))
+      .catch((e) => setErrors({ [e.path]: e.message }));
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
-    if (!isValid) return;
-    const newData = {
-      ...data,
-      qualities: data.qualities.map((q) => q.value),
-    };
-    dispatch(signUp(newData));
+    if (!isValid) {
+      return;
+    } else {
+      const newData = {
+        ...data,
+        qualities: data.qualities.map((q) => q.value),
+      };
+      dispatch(signUp(newData));
+    }
   };
 
   return (

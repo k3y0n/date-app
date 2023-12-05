@@ -12,7 +12,6 @@ import { loadProfessionList } from "../../../store/professionsSlice";
 
 const AppLoader = ({ children }) => {
   const dispatch = useDispatch();
-  const dataStatus = useSelector(getDataStatus());
   const isLoggedIn = useSelector(getIsLoggedIn());
   const usersStatusLoading = useSelector(getUsersLoadingStatus());
 

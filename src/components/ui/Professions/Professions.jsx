@@ -1,15 +1,17 @@
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import {
-  selectProfessionById,
   getProfessionsStatus,
+  getProfessionById,
 } from "../../../store/professionsSlice.js";
 
 const Professions = ({ id }) => {
   const professionLoading = useSelector(getProfessionsStatus());
-  const profession = useSelector((state) => selectProfessionById(state, id));
+  const professionName = useSelector(getProfessionById(id));
   return (
-    <>{professionLoading ? <h2>Loading ...</h2> : <p>{profession.name}</p>}</>
+    <>
+      {professionLoading ? <h2>Loading ...</h2> : <p>{professionName.name}</p>}
+    </>
   );
 };
 

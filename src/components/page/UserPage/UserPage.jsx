@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import UserCard from "../../ui/UserCard/UserCard";
 import QualitiesCard from "../../ui/QualitesCard/QualitiesCard";
@@ -10,19 +9,13 @@ import { selectUserById } from "../../../store/usersSlice";
 const UserPage = ({ userId }) => {
   const user = useSelector(selectUserById(userId));
 
-  const navigate = useNavigate();
-
-  const handleClickEdit = () => {
-    navigate(`edit`);
-  };
-
   return (
     <>
-      {userId && user ? (
+      {userId ? (
         <div className="container">
           <div className="row gutters-sm">
             <div className="col-md-4 mb-3">
-              <UserCard {...user} handleClickEdit={handleClickEdit} />
+              <UserCard user={user} />
               <QualitiesCard qualities={user.qualities} />
               <MeetingsCard completedMeetings={user.completedMeetings} />
             </div>

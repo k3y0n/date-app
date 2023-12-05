@@ -4,7 +4,6 @@ import CheckBoxField from "../../common/Form/CheckBoxField";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthErrors, signIn } from "../../../store/usersSlice";
-import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -22,13 +21,13 @@ const LoginForm = () => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const validateShema = yup.object().shape({
+  const validateSchema = yup.object().shape({
     password: yup.string().required("Пароль должен быть введен"),
     email: yup.string().required("Email должен быть введен"),
   });
 
   const validate = () => {
-    validateShema
+    validateSchema
       .validate(data)
       .then(() => setErrors({}))
       .catch((e) => setErrors({ [e.path]: e.message }));
@@ -38,7 +37,9 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
     dispatch(signIn(data));
   };
 

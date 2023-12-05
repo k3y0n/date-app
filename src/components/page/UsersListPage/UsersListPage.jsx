@@ -58,7 +58,6 @@ const UsersListPage = () => {
   );
 
   const visibleUsers = paginate(sortedUsers, currentPage, pageSize);
-  console.log(visibleUsers)
 
   const handlePage = (page) => {
     setCurrentPage(page);

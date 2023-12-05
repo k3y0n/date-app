@@ -1,15 +1,19 @@
 import PropTypes from "prop-types";
 import Card from "../../hoc/Card/Card";
 import { useSelector } from "react-redux";
-import { selectProfessionById } from "../../../store/professionsSlice";
+import { getProfessionById } from "../../../store/professionsSlice";
 import { getCurrentUserData } from "../../../store/usersSlice";
+import { useNavigate } from "react-router";
 
-const UserCard = ({ name, profession, rate, _id, handleClickEdit }) => {
-  const professionName = useSelector((state) =>
-    selectProfessionById(state, profession)
-  );
-
+const UserCard = ({ user }) => {
+  const { _id, name, profession, rate, image } = user;
+  const professionName = useSelector(getProfessionById(profession));
   const currentUser = useSelector(getCurrentUserData());
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`edit`);
+  };
 
   return (
     <Card className={"card mb-3"}>
@@ -17,13 +21,13 @@ const UserCard = ({ name, profession, rate, _id, handleClickEdit }) => {
         {currentUser._id === _id && (
           <button
             className="position-absolute top-0 end-0 btn btn-light btn-sm"
-            onClick={handleClickEdit}
+            onClick={handleClick}
           >
             <i className="bi bi-gear"></i>
           </button>
         )}
         <div className="d-flex flex-column align-items-center text-center position-relative">
-          <img src={currentUser.image} className="rounded-circle" width="150" />
+          <img src={image} className="rounded-circle" width="150" />
           <div className="mt-3">
             <h4>{name}</h4>
             {professionName && (

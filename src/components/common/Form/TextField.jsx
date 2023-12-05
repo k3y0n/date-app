@@ -12,7 +12,8 @@ const TextField = ({ label, type, name, value, error, onChange }) => {
     onChange({ name: target.name, value: target.value });
   };
 
-  const togglePassword = () => {
+  const togglePassword = (e) => {
+    e.stopPropagation();
     setShowPassword(!showPassword);
   };
 
