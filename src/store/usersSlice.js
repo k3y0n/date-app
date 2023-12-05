@@ -12,6 +12,7 @@ const initialState = localStorageService.getToken()
       error: null,
       auth: { userId: localStorageService.getUserId() },
       isLoggedIn: true,
+      dataLoaded: false,
     }
   : {
       enteties: null,
@@ -19,6 +20,7 @@ const initialState = localStorageService.getToken()
       error: null,
       auth: null,
       isLoggedIn: false,
+      dataLoaded: false,
     };
 
 const usersSlice = createSlice({
@@ -31,6 +33,7 @@ const usersSlice = createSlice({
     userRecieved: (state, action) => {
       state.isLoading = false;
       state.enteties = action.payload;
+      state.dataLoaded = true;
     },
     usersRequestFailed: (state, action) => {
       state.isLoading = false;
@@ -175,5 +178,7 @@ export const getCurrentUserData = () => (state) => {
     ? state.users.enteties.find((u) => u._id === state.users.auth.userId)
     : null;
 };
+export const getDataStatus = () => (state) => state.users.dataLoaded;
+export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
 
 export default usersSlice.reducer;

@@ -43,9 +43,9 @@ const EditForm = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    validate();
-  }, [data]);
+  // useEffect(() => {
+  //   validate();
+  // }, [data]);
 
   const handleChange = (target) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));

@@ -45,7 +45,7 @@ const LoginForm = () => {
     e.preventDefault();
     if (!validate()) return;
     dispatch(signIn(data));
-    navigate("/");
+    navigate("/users");
   };
 
   return (

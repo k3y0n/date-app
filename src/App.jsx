@@ -8,25 +8,11 @@ import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute";
 import LogOut from "./layouts/LogOut";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loadQualityList } from "./store/qualitySlice";
-import { loadProfessionList } from "./store/professionsSlice";
-import { loadUserList } from "./store/usersSlice";
-import { loadCommentsList } from "./store/commentsSlice";
+import AppLoader from "./components/hoc/Loader/AppLoader";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(loadQualityList());
-    dispatch(loadProfessionList());
-    dispatch(loadUserList());
-    dispatch(loadCommentsList());
-  }, []);
-
   return (
-    <>
+    <AppLoader>
       <AuthProvider>
         <Navbar />
         <Routes>
@@ -43,7 +29,7 @@ function App() {
         </Routes>
       </AuthProvider>
       <ToastContainer autoClose={1500} />
-    </>
+    </AppLoader>
   );
 }
 

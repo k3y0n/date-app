@@ -14,7 +14,7 @@ const Filter = ({
             <li
               key={item[valueProperty]}
               className={
-                "list-group-item" + (item === profession ? " active" : "")
+                "list-group-item" + (item._id === profession ? " active" : "")
               }
               onClick={() => onItemSelect(item)}
               role="button"
@@ -27,7 +27,7 @@ const Filter = ({
               key={items[item][valueProperty]}
               className={
                 "list-group-item" +
-                (items[item] === profession ? " active" : "")
+                (items[item]._id === profession ? " active" : "")
               }
               onClick={() => onItemSelect(items[item])}
               role="button"

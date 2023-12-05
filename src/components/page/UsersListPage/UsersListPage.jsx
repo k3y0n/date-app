@@ -18,6 +18,7 @@ const UsersListPage = () => {
   const currentUserId = useSelector(getCurrentUserId());
   const professions = useSelector(getProfessions());
   const professionLoading = useSelector(getProfessionsStatus());
+
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState();
   const [currentSort, setCurrentSort] = useState({
@@ -26,6 +27,7 @@ const UsersListPage = () => {
   });
   const [search, setSearch] = useState("");
   const pageSize = 3;
+
 
   useEffect(() => {
     setCurrentPage(1);
@@ -75,7 +77,7 @@ const UsersListPage = () => {
   };
 
   const handleProfessionSelect = (profession) => {
-    setSelectedProfession(profession);
+    setSelectedProfession(profession._id);
     setSearch("");
   };
 
