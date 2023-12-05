@@ -1,7 +1,14 @@
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
+const MultiSelectField = ({
+  options,
+  onChange,
+  name,
+  error,
+  label,
+  defaultValue,
+}) => {
   const optionsArray =
     !Array.isArray(options) && typeof options === "object"
       ? Object.values(options)
@@ -23,6 +30,8 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
         onChange={handleChange}
         name={name}
       />
+
+      {error.length === 0 && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };

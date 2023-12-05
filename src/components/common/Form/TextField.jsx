@@ -28,7 +28,6 @@ const TextField = ({ label, type, name, value, error, onChange }) => {
           name={name}
           value={value}
           onChange={handleChange}
-          required
         />
         {type === "password" && (
           <button className="btn btn-outline-primary" onClick={togglePassword}>

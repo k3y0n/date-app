@@ -18,7 +18,7 @@ const UserPage = ({ userId }) => {
 
   return (
     <>
-      {user ? (
+      {userId && user ? (
         <div className="container">
           <div className="row gutters-sm">
             <div className="col-md-4 mb-3">
@@ -27,7 +27,7 @@ const UserPage = ({ userId }) => {
               <MeetingsCard completedMeetings={user.completedMeetings} />
             </div>
             <div className="col-md-8">
-                <Comments />
+              <Comments />
             </div>
           </div>
         </div>

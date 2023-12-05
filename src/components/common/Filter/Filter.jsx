@@ -56,7 +56,7 @@ Filter.propTypes = {
   ]).isRequired,
   valueProperty: PropTypes.string.isRequired,
   contentProperty: PropTypes.string.isRequired,
-  profession: PropTypes.object,
+  profession: PropTypes.string,
   onItemSelect: PropTypes.func.isRequired,
 };
 

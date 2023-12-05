@@ -15,7 +15,6 @@ import { orderBy } from "lodash";
 
 const Comments = () => {
   const { userId } = useParams();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,7 +40,7 @@ const Comments = () => {
           <AddComentForm onAdd={handleSubmit} />
         </div>
       </Card>
-      {comments.length > 0 && (
+      {sortedComments.length > 0 && (
         <Card className={"card mb-3"}>
           <div className="card-body ">
             <h2>Comments</h2>

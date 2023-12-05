@@ -22,10 +22,7 @@ const AppLoader = ({ children }) => {
     if (isLoggedIn) {
       dispatch(loadUserList());
     }
-    if (!dataStatus) {
-      dispatch(loadUserList());
-    }
-  }, []);
+  }, [isLoggedIn]);
 
   return <>{usersStatusLoading ? "Loading..." : children}</>;
 };

@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Qualities from "../Qualities/Qualities";
-import BookMark from "../../common/Bookmark/Bookmark";
 import Table from "../../common/Table/Table";
 import Professions from "../Professions/Professions";
 
-const UsersTable = ({ visibleUsers, currentSort, toggleBookmark, onSort }) => {
+const UsersTable = ({ visibleUsers, currentSort,  onSort }) => {
   const columns = {
     name: {
       path: "name",
@@ -25,13 +24,6 @@ const UsersTable = ({ visibleUsers, currentSort, toggleBookmark, onSort }) => {
       name: "Встретился, раз",
     },
     rate: { path: "rate", name: "Оценка" },
-    bookmark: {
-      path: "bookmark",
-      name: "Избранное",
-      component: (user) => (
-        <BookMark id={user._id} onToggle={toggleBookmark} {...user} />
-      ),
-    },
   };
   return (
     <Table
@@ -46,7 +38,6 @@ const UsersTable = ({ visibleUsers, currentSort, toggleBookmark, onSort }) => {
 UsersTable.propTypes = {
   visibleUsers: PropTypes.array.isRequired,
   currentSort: PropTypes.object.isRequired,
-  toggleBookmark: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
 };
 

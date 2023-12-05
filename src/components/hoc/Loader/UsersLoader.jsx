@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 
 const UsersLoader = ({ children }) => {
   const dispatch = useDispatch();
-
   const dataStatus = useSelector(getDataStatus());
 
   useEffect(() => {

@@ -26,8 +26,7 @@ const UsersListPage = () => {
     order: "asc",
   });
   const [search, setSearch] = useState("");
-  const pageSize = 3;
-
+  const pageSize = 2;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -46,9 +45,11 @@ const UsersListPage = () => {
 
   const filteredUsers = filterUsers(users);
 
+
   const searchUsers = filteredUsers.filter((user) =>
     user.name.toLowerCase().includes(search)
   );
+
 
   const sortedUsers = _.orderBy(
     searchUsers,
@@ -57,19 +58,7 @@ const UsersListPage = () => {
   );
 
   const visibleUsers = paginate(sortedUsers, currentPage, pageSize);
-
-  const handleDelete = (id) => {
-    // setUsers(users.filter((user) => user._id !== id));
-    // console.log(id);
-  };
-
-  const toggleBookmark = (id) => {
-    // setUsers(
-    //   users.map((user) =>
-    //     user._id === id ? { ...user, bookmark: !user.bookmark } : user
-    //   )
-    // );
-  };
+  console.log(visibleUsers)
 
   const handlePage = (page) => {
     setCurrentPage(page);
@@ -116,12 +105,10 @@ const UsersListPage = () => {
                   <UsersTable
                     visibleUsers={visibleUsers}
                     currentSort={currentSort}
-                    handleDelete={handleDelete}
-                    toggleBookmark={toggleBookmark}
                     onSort={handleSort}
                   />
                 )}
-                {visibleUsers.length >= 3 && (
+                {visibleUsers.length >= 2 && (
                   <div className="d-flex justify-content-center">
                     <Pagination
                       itemsCount={filteredUsers.length}

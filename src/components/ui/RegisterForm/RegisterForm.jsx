@@ -3,8 +3,6 @@ import TextField from "../../common/Form/TextField";
 import SelectField from "../../common/Form/SelectField";
 import RadioField from "../../common/Form/RadioField";
 import MultiSelectField from "../../common/Form/MultiSelectField";
-import CheckBoxField from "../../common/Form/CheckBoxField";
-import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { getQualities } from "../../../store/qualitySlice.js";
@@ -12,7 +10,6 @@ import { getProfessions } from "../../../store/professionsSlice.js";
 import { signUp } from "../../../store/usersSlice.js";
 
 const RegisterForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
@@ -21,7 +18,6 @@ const RegisterForm = () => {
     name: "",
     sex: "male",
     qualities: [],
-    license: false,
   });
   const professions = useSelector(getProfessions());
   const qualities = useSelector(getQualities());
@@ -44,10 +40,12 @@ const RegisterForm = () => {
     validate();
   }, [data]);
 
-  const validateShema = yup.object().shape({
+  const validateSchema = yup.object().shape({
     sex: yup.string().required("Выберете ваш пол"),
-    license: yup.string().required("Вы должны быть согласны с лицензией"),
-    qualities: yup.array().required("Выберете ваши качеста"),
+    qualities: yup
+      .array()
+      .min(1, "Выберете ваши качества")
+      .required("Выберете ваши качества"),
     profession: yup.string().required("Профессия должна быть выбрана"),
     password: yup
       .string()
@@ -62,30 +60,37 @@ const RegisterForm = () => {
     name: yup
       .string()
       .required("Имя должно быть введено")
-      .min(3, "Имя должно быть не меньше 3 символовов"),
+      .min(3, "Имя должно быть не меньше 3 символов"),
     email: yup
       .string()
       .required("Email должен быть введен")
       .matches(/^\S+@\S+\.\S+$/g, "Email  не правильный"),
   });
 
-  const validate = () => {
-    validateShema
-      .validate(data)
-      .then(() => setErrors({}))
-      .catch((e) => setErrors({ [e.path]: e.message }));
-    return Object.keys(errors).length === 0;
+  const validate = async () => {
+    try {
+      await validateSchema.validate(data, { abortEarly: false });
+      setErrors({});
+      return true;
+    } catch (e) {
+      const newErrors = {};
+      e.inner.forEach((error) => {
+        newErrors[error.path] = error.message;
+      });
+      setErrors(newErrors);
+      return false;
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    const isValid = validate();
+    if (!isValid) return;
     const newData = {
       ...data,
       qualities: data.qualities.map((q) => q.value),
     };
     dispatch(signUp(newData));
-    navigate("/");
   };
 
   return (
@@ -130,23 +135,17 @@ const RegisterForm = () => {
         value={data.sex}
         name="sex"
         label="Пол"
+        error={errors.sex}
         onChange={handleChange}
       />
       <MultiSelectField
         onChange={handleChange}
         options={qualitiesList}
         defaultValue={data.qualities}
+        error={data.qualities}
         name="qualities"
         label="Качества"
       />
-      <CheckBoxField
-        value={data.license}
-        name="license"
-        onChange={handleChange}
-        error={errors.license}
-      >
-        Согласен с лицензией
-      </CheckBoxField>
       <button className="btn btn-primary w-100" disabled={!isValid}>
         Зарегестрироваться
       </button>

@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import { selectProfessionById } from "../../../store/professionsSlice";
 import { getCurrentUserData } from "../../../store/usersSlice";
 
-const UserCard = ({ name, email, _id, profession, rate, handleClickEdit }) => {
+const UserCard = ({ name, profession, rate, _id, handleClickEdit }) => {
   const professionName = useSelector((state) =>
     selectProfessionById(state, profession)
   );
+
   const currentUser = useSelector(getCurrentUserData());
 
   return (
@@ -22,14 +23,7 @@ const UserCard = ({ name, email, _id, profession, rate, handleClickEdit }) => {
           </button>
         )}
         <div className="d-flex flex-column align-items-center text-center position-relative">
-          <img
-            src={
-              "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-              email
-            }
-            className="rounded-circle"
-            width="150"
-          />
+          <img src={currentUser.image} className="rounded-circle" width="150" />
           <div className="mt-3">
             <h4>{name}</h4>
             {professionName && (

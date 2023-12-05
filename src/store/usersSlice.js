@@ -4,6 +4,7 @@ import authService from "../services/auth.service";
 import localStorageService from "../services/localstorage.service";
 import { randomData } from "../utils/randomData";
 import { toast } from "react-toastify";
+import { generateAuthError } from "../utils/generateAuthError.js";
 
 const initialState = localStorageService.getToken()
   ? {
@@ -92,10 +93,17 @@ export const signIn =
     dispatch(authRequested());
     try {
       const data = await authService.singIn({ email, password });
-      localStorageService.setTokens(data);
       dispatch(authRequestSuccess({ userId: data.localId }));
+      localStorageService.setTokens(data);
+      window.location.href = "/"; //bad practice
     } catch (error) {
-      dispatch(authRequestFailed(error.message));
+      const { code, message } = error.response.data.error;
+      if (code === 400) {
+        const errorMessage = generateAuthError(message);
+        dispatch(authRequestFailed(errorMessage));
+      } else {
+        dispatch(authRequestFailed(error.message));
+      }
     }
   };
 
@@ -113,12 +121,13 @@ export const signUp =
           email,
           image:
             "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-            email,
+            email.slice(0, 3),
           rate: randomData(1, 5),
           completedMeetings: randomData(0, 200),
           ...rest,
         })
       );
+      window.location.href = "/"; //bad practice
     } catch (error) {
       dispatch(authRequestFailed(error.message));
     }
@@ -127,11 +136,7 @@ export const signUp =
 export const createUser = (payload) => async (dispatch) => {
   dispatch(userCreateRequested());
   try {
-    const { content } = await toast.promise(userService.create(payload), {
-      pending: "Create User is pending",
-      success: "Create User  succes 👌",
-      error: "Create User  failed 🤯",
-    });
+    const { content } = await userService.create(payload);
     dispatch(userCreated(content));
   } catch (error) {
     dispatch(createUserFailed(error.message));
@@ -180,5 +185,6 @@ export const getCurrentUserData = () => (state) => {
 };
 export const getDataStatus = () => (state) => state.users.dataLoaded;
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
+export const getAuthErrors = () => (state) => state.users.error;
 
 export default usersSlice.reducer;
