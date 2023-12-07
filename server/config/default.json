@@ -1,4 +1,4 @@
 {
   "PORT": 8080,
-  "mongodb": "mongodb+srv://k3y0n:mCYGIYtUNs0LyNE1@cluster0.aphvqec.mongodb.net/?retryWrites=true&w=majority"
+  "mongodb": "mongodb+srv://k3y0n:mCYGIYtUNs0LyNE1@cluster0.aphvqec.mongodb.net/app?retryWrites=true&w=majority"
 }

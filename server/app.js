@@ -1,7 +1,8 @@
-import express from "express";
-import chalk from "chalk";
-import config from "config";
-import mongoose from "mongoose";
+const express = require("express");
+const chalk = require("chalk");
+const config = require("config");
+const mongoose = require("mongoose");
+const initDataBase = require("./startApp/initDatabase.js");
 
 const app = express();
 const PORT = config.get("PORT") ?? 8080;
@@ -15,12 +16,14 @@ if (process.env.NODE_ENV === "production") {
   console.log("start dev mode");
 }
 
-
 const start = async () => {
   try {
+    mongoose.connection.once("open", () => {
+      initDataBase();
+    });
+
     await mongoose.connect(config.get("mongodb"));
     console.log(chalk.green(`Mongodb connected 💻`));
-
 
     app.listen(PORT, () => {
       console.log(chalk.green(`Server started on  port ⚡️:${PORT}`));
