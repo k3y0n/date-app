@@ -1,5 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
-import commentService from "../services/comment.service";
+import commentService from "../services/comment.service.js";
 import { nanoid } from "nanoid";
 import { getCurrentUserId } from "./usersSlice.js";
 

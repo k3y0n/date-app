@@ -1,8 +1,8 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
-import userService from "../services/user.service";
-import authService from "../services/auth.service";
-import localStorageService from "../services/localstorage.service";
-import { randomData } from "../utils/randomData";
+import userService from "../services/user.service.js";
+import authService from "../services/auth.service.js";
+import localStorageService from "../services/localstorage.service.js";
+import { randomData } from "../utils/randomData.js";
 import { toast } from "react-toastify";
 import { generateAuthError } from "../utils/generateAuthError.js";
 
