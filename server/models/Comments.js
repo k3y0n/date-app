@@ -1,5 +1,4 @@
-const { Schema, model } = require("mongoose");
-
+import { Schema, model } from "mongoose";
 const schema = new Schema(
   {
     content: { type: String, required: true },
@@ -19,4 +18,4 @@ const schema = new Schema(
   }
 );
 
-module.exports = model("Comment", schema);
+export default model("Comment", schema);

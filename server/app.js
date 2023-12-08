@@ -1,14 +1,20 @@
-const express = require("express");
-const chalk = require("chalk");
-const config = require("config");
-const mongoose = require("mongoose");
-const initDataBase = require("./startApp/initDatabase.js");
+import dotenv from "dotenv";
+import express from "express";
+import chalk from "chalk";
+import config from "config";
+import mongoose from "mongoose";
+import { initDatabase } from "./startApp/initDatabase.js";
+import router from "./routes/index.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = config.get("PORT") ?? 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/api", router);
 
 if (process.env.NODE_ENV === "production") {
   console.log("start prod mode");
@@ -19,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
 const start = async () => {
   try {
     mongoose.connection.once("open", () => {
-      initDataBase();
+      initDatabase();
     });
 
     await mongoose.connect(config.get("mongodb"));

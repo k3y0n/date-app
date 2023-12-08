@@ -1,7 +1,7 @@
-const professionsJSON = require("../mock/professions.json");
-const qualitiesJSON = require("../mock/qualities.json");
-const Profession = require("../models/Professions.js");
-const Quality = require("../models/Qualities.js");
+import professionsJSON from "../mock/professions.json" assert { type: 'json' };
+import qualitiesJSON from "../mock/qualities.json" assert { type: 'json' };
+import Profession from "../models/Professions.js";
+import Quality from "../models/Qualities.js";
 
 const createInitialEntity = async (Model, data) => {
   await Model.collection.drop();
@@ -21,7 +21,7 @@ const createInitialEntity = async (Model, data) => {
   );
 };
 
-module.exports = async () => {
+export const initDatabase = async () => {
   const professions = await Profession.find();
   const qualities = await Quality.find();
 
