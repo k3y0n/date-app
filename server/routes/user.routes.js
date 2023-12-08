@@ -1,9 +1,10 @@
 import express from "express";
 import User from "../models/Users.js";
+import { auth } from "../middleware/auth.middleware.js";
 
 const router = express.Router({ mergeParams: true });
 
-router.get("/user", async (_, res) => {
+router.get("/", auth, async (_, res) => {
   try {
     const users = await User.find();
     return res.status(200).send(users);
@@ -14,11 +15,11 @@ router.get("/user", async (_, res) => {
   }
 });
 
-router.patch("/user/:id", async (req, res) => {
+router.patch("/:userId", auth, async (req, res) => {
   try {
-    const { id } = req.params;
-    if (id) {
-      const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    const { userId } = req.params;
+    if (userId === req.user._id) {
+      const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
         new: true,
       });
       res.status(200).send(updatedUser);
