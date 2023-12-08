@@ -2,11 +2,9 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import userService from "../services/user.service.js";
 import authService from "../services/auth.service.js";
 import localStorageService from "../services/localstorage.service.js";
-import { randomData } from "../utils/randomData.js";
-import { toast } from "react-toastify";
 import { generateAuthError } from "../utils/generateAuthError.js";
 
-const initialState = localStorageService.getToken()
+const initialState = localStorageService.getAccessToken()
   ? {
       enteties: null,
       isLoading: true,
@@ -82,8 +80,6 @@ export const {
 } = usersSlice.actions;
 
 const authRequested = createAction("users/authRequested");
-const userCreateRequested = createAction("users/userCreateRequested");
-const createUserFailed = createAction("users/createUserFailed");
 const userUpdateRequested = createAction("users/userUpdateRequested");
 const userUpdateFailed = createAction("users/userUpdateFailed");
 
@@ -107,39 +103,16 @@ export const signIn =
     }
   };
 
-export const signUp =
-  ({ email, password, ...rest }) =>
-  async (dispatch) => {
-    dispatch(authRequested());
-    try {
-      const data = await authService.signUp({ email, password });
-      localStorageService.setTokens(data);
-      dispatch(authRequested({ userId: data.localId }));
-      dispatch(
-        createUser({
-          _id: data.localId,
-          email,
-          image:
-            "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
-            email.slice(0, 3),
-          rate: randomData(1, 5),
-          completedMeetings: randomData(0, 200),
-          ...rest,
-        })
-      );
-      window.location.href = "/"; //bad practice
-    } catch (error) {
-      dispatch(authRequestFailed(error.message));
-    }
-  };
-
-export const createUser = (payload) => async (dispatch) => {
-  dispatch(userCreateRequested());
+export const signUp = (payload) => async (dispatch) => {
+  dispatch(authRequested());
   try {
-    const { content } = await userService.create(payload);
-    dispatch(userCreated(content));
+    const data = await authService.signUp(payload);
+    localStorageService.setTokens(data);
+    console.log("payload", payload);
+    dispatch(authRequested({ userId: data.localId }));
+    window.location.href = "/"; //bad practice
   } catch (error) {
-    dispatch(createUserFailed(error.message));
+    dispatch(authRequestFailed(error.message));
   }
 };
 

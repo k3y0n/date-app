@@ -1,4 +1,4 @@
 {
-  "apiEndpoint": "https://date-app-firebase-default-rtdb.europe-west1.firebasedatabase.app/",
-  "isFirebase": true
+  "apiEndpoint": "http://localhost:8080/api/",
+  "isFirebase": false
 }

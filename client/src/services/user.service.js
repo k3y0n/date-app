@@ -13,6 +13,7 @@ const userService = {
     return data;
   },
   create: async (payload) => {
+    console.log('create payload: ' + JSON.stringify(payload));
     const { data } = await httpService.put(userEndPoint + payload._id, payload);
     return data;
   },

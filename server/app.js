@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import chalk from "chalk";
 import config from "config";
+import cors from 'cors';
 import mongoose from "mongoose";
 import { initDatabase } from "./startApp/initDatabase.js";
 import router from "./routes/index.js";
@@ -12,6 +13,7 @@ const app = express();
 const PORT = config.get("PORT") ?? 8080;
 
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", router);
