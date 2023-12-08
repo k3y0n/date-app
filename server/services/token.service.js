@@ -13,24 +13,39 @@ class TokenService {
     return { accessToken, refreshToken, expiresIn: 3600 };
   };
 
-  async save(userId, refreshToken) {
-    const data = await Token.findOne({ userId });
-    console.log("enter save");
-
+  async save(user, refreshToken) {
+    const data = await Token.findOne({ user });
     if (data) {
       data.refreshToken = refreshToken;
-      console.log("done");
       return data.save();
     }
 
-    const token = await Token.create({
-      userId,
-      refreshToken,
-    });
+    const token = await Token.create({ user, refreshToken });
+    return token;
+  }
 
-    console.log("token", token);
+  validateRefresh(refreshToken) {
+    try {
+      return jwt.verify(refreshToken, config.get("JWT_SECRET_REFRESH"));
+    } catch (e) {
+      return null;
+    }
+  }
 
-    // return token;
+  validateAccess(accessToken) {
+    try {
+      return jwt.verify(accessToken, config.get("JWT_SECRET"));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async findToken(refreshToken) {
+    try {
+      return await Token.findOne({ refreshToken });
+    } catch (e) {
+      return null;
+    }
   }
 }
 
