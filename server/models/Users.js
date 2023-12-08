@@ -2,10 +2,7 @@ import { Schema, model } from "mongoose";
 
 const schema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
+    name: String,
     email: {
       type: String,
       required: true,
@@ -25,13 +22,11 @@ const schema = new Schema(
     profession: {
       type: Schema.Types.ObjectId,
       ref: "Profession",
-      required: true,
     },
     qualities: [
       {
         type: Schema.Types.ObjectId,
         ref: "Quality",
-        required: true,
       },
     ],
   },

@@ -1,15 +1,37 @@
 import express from "express";
-import Users from "../models/Users.js";
+import User from "../models/Users.js";
 import bcrypt from "bcryptjs";
 import { randomData } from "../utils/randomData.js";
-import TokenService from "../services/TokenService.js";
+import { check, validationResult } from "express-validator";
+import TokenService from "../services/token.service.js";
+
 const router = express.Router({ mergeParams: true });
 
-router.post("/signUp", async (req, res) => {
+const signUpValidator = [
+  check("name", "Name is required").not().isEmpty(),
+  check("email", "Email is required").not().isEmpty().isEmail(),
+  check("password", "Min length password 8 symbols")
+    .not()
+    .isEmpty()
+    .isLength({ min: 8 }),
+];
+
+router.post("/signUp", signUpValidator, async (req, res) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: {
+          message: errors.array()[0].msg,
+          code: 400,
+        },
+      });
+    }
+
     const { email, password, name, ...data } = req.body;
 
-    const user = await Users.findOne({ email: email });
+    const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
         error: {
@@ -21,8 +43,8 @@ router.post("/signUp", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = Users.create({
-      email: email,
+    const newUser = User.create({
+      email,
       password: hashedPassword,
       image:
         "https://api.dicebear.com/7.x/personas/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&seed=" +
@@ -33,6 +55,7 @@ router.post("/signUp", async (req, res) => {
     });
 
     const tokens = TokenService.generateToken({ _id: newUser._id });
+    await TokenService.save(newUser._id, tokens.refreshToken);
 
     return res.status(201).send({
       ...tokens,

@@ -10,10 +10,28 @@ class TokenService {
     const refreshToken = jwt.sign(data, config.get("JWT_SECRET_REFRESH"), {
       expiresIn: 3600,
     });
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, expiresIn: 3600 };
   };
 
   async save(userId, refreshToken) {
-    await Token.findOne({ userId: userId });
+    const data = await Token.findOne({ userId });
+    console.log("enter save");
+
+    if (data) {
+      data.refreshToken = refreshToken;
+      console.log("done");
+      return data.save();
+    }
+
+    const token = await Token.create({
+      userId,
+      refreshToken,
+    });
+
+    console.log("token", token);
+
+    // return token;
   }
 }
+
+export default new TokenService();
