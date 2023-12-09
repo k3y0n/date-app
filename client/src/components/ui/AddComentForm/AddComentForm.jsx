@@ -4,7 +4,7 @@ import TextAreaField from "../../common/Form/TextAreaField";
 import PropTypes from "prop-types";
 
 const AddComentForm = ({ onAdd }) => {
-  const [data, setData] = useState({ comment: "" });
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
 
@@ -17,7 +17,7 @@ const AddComentForm = ({ onAdd }) => {
   }, [data]);
 
   const validateShema = yup.object().shape({
-    comment: yup.string().required("Комментарий не должен быть  пустым"),
+    content: yup.string().required("Комментарий не должен быть  пустым"),
   });
 
   const validate = () => {
@@ -46,7 +46,7 @@ const AddComentForm = ({ onAdd }) => {
       <form onSubmit={handleSubmit} className="needs-validation">
         <TextAreaField
           minLength="3"
-          name="comment"
+          name="content"
           onChange={handleChange}
           value={data.comment}
           error={errors.comment}

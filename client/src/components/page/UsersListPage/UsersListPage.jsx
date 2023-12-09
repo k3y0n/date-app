@@ -32,27 +32,20 @@ const UsersListPage = () => {
     setCurrentPage(1);
   }, [selectedProfession]);
 
-  const filterUsers = (data) => {
-    const filteredUsers = selectedProfession
+  function filterUsers(data) {
+    const filteredUsers = search
       ? data.filter(
-          (user) =>
-            JSON.stringify(user.profession) ===
-            JSON.stringify(selectedProfession)
+          (user) => user.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
         )
+      : selectedProfession
+      ? data.filter((user) => user.profession === selectedProfession)
       : data;
-    return filteredUsers.filter((user) => user._id !== currentUserId);
-  };
-
+    return filteredUsers.filter((u) => u._id !== currentUserId);
+  }
   const filteredUsers = filterUsers(users);
 
-
-  const searchUsers = filteredUsers.filter((user) =>
-    user.name.toLowerCase().includes(search)
-  );
-
-
   const sortedUsers = _.orderBy(
-    searchUsers,
+    filteredUsers,
     [currentSort.path],
     [currentSort.order]
   );

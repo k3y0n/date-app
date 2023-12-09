@@ -3,6 +3,7 @@ import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 
 const Table = ({ data, columns, selectedSort, onSort }) => {
+
   return (
     <table className="table">
       <TableHeader

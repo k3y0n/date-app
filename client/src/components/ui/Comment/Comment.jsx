@@ -2,8 +2,9 @@ import { useSelector } from "react-redux";
 import { formateDate } from "../../../utils/formateDate";
 import Card from "../../hoc/Card/Card";
 import { getCurrentUserData, selectUserById } from "../../../store/usersSlice";
+import PropTypes from "prop-types";
 
-const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
+const Comment = ({ content, created_at, userId, _id, handleDelete }) => {
   const user = useSelector(selectUserById(userId));
   const currentUser = useSelector(getCurrentUserData());
 
@@ -33,11 +34,11 @@ const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
                           <i
                             className="bi bi-x-lg"
                             onClick={() => handleDelete(_id)}
-                          ></i>
+                          />
                         </button>
                       )}
                     </div>
-                    <p className="small mb-0">{comment}</p>
+                    <p className="small mb-0">{content}</p>
                   </div>
                 </div>
               </div>
@@ -47,6 +48,14 @@ const Comment = ({ comment, created_at, userId, _id, handleDelete }) => {
       )}
     </>
   );
+};
+
+Comment.propTypes = {
+  content: PropTypes.string.isRequired,
+  created_at: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default Comment;

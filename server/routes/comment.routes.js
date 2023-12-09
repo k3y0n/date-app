@@ -20,7 +20,7 @@ router
         ...req.body,
         userId: req.user._id,
       });
-      res.status(201).send(newComment);
+      res.status(200).send(newComment);
     } catch (e) {
       res.status(500).json({ message: "Error:" + e.message });
     }
@@ -31,12 +31,10 @@ router.delete("/:commentId", auth, async (req, res) => {
     const { commentId } = req.params;
     const removedComment = await Comment.findById(commentId);
 
+    console.log("removedComment", removedComment);
     if (removedComment.userId.toString() === req.user._id) {
-      await removedComment.remove();
-      return res.status(200).json({
-        message: "Comment deleted",
-        code: 200,
-      });
+      await removedComment.deleteOne();
+      return res.send(null);
     } else {
       res.status(401).json({ message: "Unauthorized" });
     }
