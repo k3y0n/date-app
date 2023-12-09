@@ -100,7 +100,7 @@ const UsersListPage = () => {
                     onSort={handleSort}
                   />
                 )}
-                {visibleUsers.length >= 2 && (
+                {visibleUsers.length >= 1 && (
                   <div className="d-flex justify-content-center">
                     <Pagination
                       itemsCount={filteredUsers.length}
